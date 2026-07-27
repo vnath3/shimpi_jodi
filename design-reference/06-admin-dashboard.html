@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shimpi Jodi — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1E3548;--indigo-70:#4A5F71;--teal:#2C6E75;--teal-tint:#E8F1F1;
+  --coral:#F4633A;--coral-tint:#FDEDE7;--cream:#FAF7F2;--surface:#FFF;
+  --ink:#141A1F;--muted:#7C868F;--line:#E7E3DC;--radius:14px;
+  --shadow:0 1px 3px rgba(30,53,72,.06);
+  --amber:#C98A2E;--green:#3F7D5C;--red:#B5533E;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Inter',-apple-system,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;}
+table{border-collapse:collapse;width:100%;}
+
+/* shell */
+.wrap{display:flex;min-height:100vh;}
+.side{
+  width:212px;flex-shrink:0;background:var(--indigo);color:#C7D3DB;
+  padding:18px 12px;position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.side .brand{display:flex;align-items:center;gap:9px;padding:0 8px 20px;}
+.side .brand svg{width:26px;height:26px;}
+.side .brand span{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16.5px;color:#fff;}
+.side .brand small{display:block;font-size:10px;color:#7E96A6;font-family:'Inter';font-weight:500;letter-spacing:.05em;text-transform:uppercase;}
+.snav{display:flex;flex-direction:column;gap:2px;}
+.snav button{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;
+  font-size:13.5px;font-weight:500;color:#B4C4CE;text-align:left;width:100%;transition:all .15s;
+}
+.snav button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.snav button:hover{background:rgba(255,255,255,.06);color:#fff;}
+.snav button.on{background:rgba(255,255,255,.11);color:#fff;font-weight:600;}
+.snav .badge{margin-left:auto;background:var(--coral);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;padding:0 5px;border-radius:999px;display:flex;align-items:center;justify-content:center;}
+.side .foot{margin-top:auto;padding:16px 10px 4px;font-size:11px;color:#6D8494;line-height:1.5;}
+
+.main{flex:1;min-width:0;padding:22px 26px 60px;}
+.mhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.mhead h1{font-family:'Baloo 2',sans-serif;font-size:23px;font-weight:700;color:var(--indigo);margin:0;letter-spacing:-.3px;}
+.mhead p{margin:2px 0 0;font-size:13px;color:var(--muted);}
+.rangebtns{display:flex;gap:5px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;}
+.rangebtns button{padding:6px 12px;border-radius:7px;font-size:12.5px;font-weight:500;color:var(--muted);}
+.rangebtns button.on{background:var(--indigo);color:#fff;font-weight:600;}
+
+.page{display:none;}
+.page.on{display:block;animation:fade .24s ease both;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px;box-shadow:var(--shadow);}
+.kpi .k{font-size:11.5px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:6px;}
+.kpi .k svg{width:13px;height:13px;stroke:var(--teal);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.kpi .v{font-family:'Baloo 2',sans-serif;font-size:26px;font-weight:700;color:var(--indigo);margin-top:5px;line-height:1.1;}
+.kpi .d{font-size:11.5px;margin-top:3px;display:flex;align-items:center;gap:4px;font-weight:500;}
+.d.up{color:var(--green);} .d.down{color:var(--red);} .d.flat{color:var(--muted);}
+.d svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;}
+
+/* cards */
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:14px;}
+.grid2b{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:900px){.grid2,.grid2b{grid-template-columns:1fr;}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);}
+.card h3{font-family:'Baloo 2',sans-serif;font-size:14.5px;font-weight:700;color:var(--indigo);margin:0 0 2px;}
+.card .csub{font-size:12px;color:var(--muted);margin:0 0 14px;}
+
+/* funnel */
+.fbar{margin-bottom:11px;}
+.fbar .fl{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;}
+.fbar .fl b{font-weight:600;}
+.fbar .ft{height:9px;background:var(--cream);border-radius:999px;overflow:hidden;}
+.fbar .ft i{display:block;height:100%;border-radius:999px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.drop{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* table */
+.tbl{overflow-x:auto;margin:0 -16px;}
+table th{text-align:left;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:9px 16px;border-bottom:1px solid var(--line);white-space:nowrap;}
+table td{padding:11px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;}
+table tr:last-child td{border-bottom:none;}
+.uc{display:flex;align-items:center;gap:9px;}
+.uc img{width:32px;height:32px;border-radius:9px;object-fit:cover;background:#DDD8D0;flex-shrink:0;}
+.uc .un{font-weight:600;color:var(--indigo);font-size:13.5px;}
+.uc .ue{font-size:11.5px;color:var(--muted);}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap;}
+.tag.green{background:#E7F1EB;color:var(--green);}
+.tag.amber{background:#FAF1DF;color:var(--amber);}
+.tag.red{background:#F8ECE8;color:var(--red);}
+.tag.grey{background:#F1F2F3;color:#6B747C;}
+.tag.teal{background:var(--teal-tint);color:var(--teal);}
+.mini{font-size:12px;color:var(--muted);}
+.act{display:flex;gap:6px;}
+.abtn{padding:6px 11px;border-radius:8px;font-size:12px;font-weight:600;transition:all .15s;white-space:nowrap;}
+.abtn.p{background:var(--coral);color:#fff;}
+.abtn.o{border:1.5px solid var(--line);color:var(--indigo-70);}
+.abtn.d{background:var(--indigo);color:#fff;}
+.abtn:active{transform:scale(.96);}
+
+/* activity */
+.alog{display:flex;flex-direction:column;}
+.aitem{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--line);align-items:flex-start;}
+.aitem:last-child{border-bottom:none;}
+.adot{width:26px;height:26px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.adot svg{width:13px;height:13px;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;}
+.adot.i{background:var(--coral-tint);} .adot.i svg{stroke:var(--coral);}
+.adot.a{background:var(--teal-tint);} .adot.a svg{stroke:var(--teal);}
+.adot.n{background:#EDEFF1;} .adot.n svg{stroke:#7C868F;}
+.adot.p{background:#E7F1EB;} .adot.p svg{stroke:var(--green);}
+.adot.r{background:#F8ECE8;} .adot.r svg{stroke:var(--red);}
+.atext{flex:1;min-width:0;font-size:13px;line-height:1.45;}
+.atext b{font-weight:600;color:var(--indigo);}
+.atime{font-size:11px;color:#A8AFB5;flex-shrink:0;}
+
+/* filter usage bars */
+.fu{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+.fu .fn{width:112px;font-size:12.5px;flex-shrink:0;}
+.fu .fb{flex:1;height:8px;background:var(--cream);border-radius:999px;overflow:hidden;}
+.fu .fb i{display:block;height:100%;background:var(--teal);border-radius:999px;transition:width .8s;}
+.fu .fv{width:38px;text-align:right;font-size:12px;font-weight:600;color:var(--indigo);flex-shrink:0;}
+
+/* review queue */
+.rq{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);}
+.rq:last-child{border-bottom:none;}
+.rq img{width:64px;height:78px;border-radius:11px;object-fit:cover;background:#DDD8D0;flex-shrink:0;}
+.rqb{flex:1;min-width:0;}
+.rqn{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;color:var(--indigo);}
+.rqm{font-size:12.5px;color:var(--muted);margin-top:1px;}
+.flags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.flag{font-size:11px;padding:3px 8px;border-radius:7px;background:#FAF1DF;color:var(--amber);font-weight:500;}
+.flag.ok{background:#E7F1EB;color:var(--green);}
+.rqacts{display:flex;gap:7px;margin-top:10px;}
+
+.note{background:var(--teal-tint);border-radius:11px;padding:11px 13px;font-size:12.5px;color:#2A5459;line-height:1.55;display:flex;gap:9px;margin-top:14px;}
+.note svg{width:15px;height:15px;stroke:var(--teal);fill:none;stroke-width:1.9;flex-shrink:0;margin-top:1px;stroke-linecap:round;stroke-linejoin:round;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--indigo);color:#fff;padding:11px 18px;border-radius:999px;font-size:13px;font-weight:500;z-index:95;opacity:0;pointer-events:none;transition:all .25s;display:flex;align-items:center;gap:8px;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+.toast .pearl{width:8px;height:8px;border-radius:50%;background:var(--coral);}
+
+@media(max-width:760px){
+  .wrap{flex-direction:column;}
+  .side{width:100%;height:auto;position:static;padding:12px;}
+  .snav{flex-direction:row;overflow-x:auto;gap:5px;}
+  .snav button{white-space:nowrap;padding:8px 12px;}
+  .snav button span.lbl{display:inline;}
+  .side .foot{display:none;}
+  .main{padding:16px 14px 50px;}
+  .tbl{margin:0 -16px;}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="side">
+    <div class="brand">
+      <svg viewBox="0 0 96 96">
+        <path d="M48 80 C 20 73, 13 42, 27 20" stroke="#5FA8AE" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M48 80 C 76 73, 83 42, 69 20" stroke="#FAF7F2" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle cx="48" cy="42" r="8.5" fill="#F4633A"/>
+      </svg>
+      <div><span>Shimpi Jodi</span><small>Admin</small></div>
+    </div>
+    <nav class="snav" id="snav">
+      <button class="on" data-p="over"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg><span class="lbl">Overview</span></button>
+      <button data-p="queue"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h9"/></svg><span class="lbl">Review queue</span><span class="badge">7</span></button>
+      <button data-p="users"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M3 20c0-3.3 2.7-5.6 6-5.6s6 2.3 6 5.6"/><path d="M17 11a3 3 0 100-6M18 20c0-2.3-.7-4-2-5"/></svg><span class="lbl">Members</span></button>
+      <button data-p="act"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg><span class="lbl">Activity</span></button>
+      <button data-p="mod"><svg viewBox="0 0 24 24"><path d="M12 3l7 3.5v5c0 4.8-3 8-7 9.5-4-1.5-7-4.7-7-9.5v-5L12 3z"/><path d="M12 9v4M12 16h.01"/></svg><span class="lbl">Reports</span><span class="badge">2</span></button>
+    </nav>
+    <div class="foot">Data shown is illustrative.<br>Wire to your DB before launch.</div>
+  </aside>
+
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <section class="page on" id="p-over">
+      <div class="mhead">
+        <div><h1>Overview</h1><p>Sunday, 26 July 2026 · updated a few minutes ago</p></div>
+        <div class="rangebtns"><button>7d</button><button class="on">30d</button><button>All</button></div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><div class="k"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M3 20c0-3.3 2.7-5.6 6-5.6s6 2.3 6 5.6"/></svg>Published profiles</div><div class="v">163</div><div class="d up"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>+13 this month</div></div>
+        <div class="kpi"><div class="k"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>Active this week</div><div class="v">89</div><div class="d up"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>55% of members</div></div>
+        <div class="kpi"><div class="k"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>Profile completion</div><div class="v">78%</div><div class="d up"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>+6 pts</div></div>
+        <div class="kpi"><div class="k"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.8 5 6.2 5c1.9 0 3.3 1 4 2.3.7-1.3 2.1-2.3 4-2.3 3.4 0 5.5 3.4 3.7 7-2.5 4.4-9.5 9-9.5 9z"/></svg>Interests sent</div><div class="v">412</div><div class="d up"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>+94 vs last month</div></div>
+        <div class="kpi"><div class="k"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>Accept rate</div><div class="v">31%</div><div class="d flat"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>steady</div></div>
+        <div class="kpi"><div class="k"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/></svg>Plus subscribers</div><div class="v">24</div><div class="d up"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>14.7% of members</div></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>Signups &amp; activity</h3>
+          <p class="csub">Daily new profiles vs. members active — last 30 days</p>
+          <svg viewBox="0 0 560 190" style="width:100%;height:auto">
+            <g stroke="#E7E3DC" stroke-width="1">
+              <line x1="34" y1="20" x2="548" y2="20"/><line x1="34" y1="60" x2="548" y2="60"/>
+              <line x1="34" y1="100" x2="548" y2="100"/><line x1="34" y1="140" x2="548" y2="140"/>
+              <line x1="34" y1="164" x2="548" y2="164"/>
+            </g>
+            <g font-size="10" fill="#A8AFB5" font-family="Inter">
+              <text x="8" y="24">40</text><text x="8" y="64">30</text><text x="8" y="104">20</text><text x="8" y="144">10</text><text x="14" y="168">0</text>
+              <text x="34" y="182">28 Jun</text><text x="240" y="182">12 Jul</text><text x="500" y="182">26 Jul</text>
+            </g>
+            <path d="M34 150 L60 145 L86 140 L112 132 L138 138 L164 124 L190 118 L216 126 L242 112 L268 104 L294 110 L320 96 L346 88 L372 94 L398 80 L424 72 L450 78 L476 64 L502 58 L528 52 L548 48"
+              fill="none" stroke="#2C6E75" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M34 150 L60 145 L86 140 L112 132 L138 138 L164 124 L190 118 L216 126 L242 112 L268 104 L294 110 L320 96 L346 88 L372 94 L398 80 L424 72 L450 78 L476 64 L502 58 L528 52 L548 48 L548 164 L34 164 Z"
+              fill="#2C6E75" opacity=".07"/>
+            <path d="M34 160 L60 158 L86 161 L112 156 L138 159 L164 152 L190 155 L216 150 L242 154 L268 148 L294 152 L320 146 L346 149 L372 144 L398 147 L424 142 L450 146 L476 140 L502 143 L528 138 L548 136"
+              fill="none" stroke="#F4633A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0"/>
+            <g font-size="10.5" font-family="Inter" font-weight="500">
+              <circle cx="400" cy="14" r="4" fill="#2C6E75"/><text x="410" y="18" fill="#4A5F71">Active</text>
+              <circle cx="466" cy="14" r="4" fill="#F4633A"/><text x="476" y="18" fill="#4A5F71">New</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="card">
+          <h3>Onboarding funnel</h3>
+          <p class="csub">Where claimed profiles drop off</p>
+          <div class="fbar"><div class="fl"><span>Claim link opened</span><b>214</b></div><div class="ft"><i style="width:100%;background:#2C6E75"></i></div></div>
+          <div class="fbar"><div class="fl"><span>Email verified</span><b>198</b></div><div class="ft"><i style="width:92%;background:#357E85"></i></div><div class="drop">−7% · OTP not received</div></div>
+          <div class="fbar"><div class="fl"><span>Details confirmed</span><b>186</b></div><div class="ft"><i style="width:87%;background:#3F8E95"></i></div><div class="drop">−6%</div></div>
+          <div class="fbar"><div class="fl"><span>Photos added</span><b>171</b></div><div class="ft"><i style="width:80%;background:#F4633A"></i></div><div class="drop">−8% · biggest drop</div></div>
+          <div class="fbar"><div class="fl"><span>Published</span><b>163</b></div><div class="ft"><i style="width:76%;background:#1E3548"></i></div><div class="drop">−5%</div></div>
+          <div class="note"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div>Photo upload is the weakest step. Worth testing a "skip for now, add later" option that still publishes the profile.</div></div>
+        </div>
+      </div>
+
+      <div class="grid2b">
+        <div class="card">
+          <h3>Which filters people actually use</h3>
+          <p class="csub">Share of searches applying each filter — tells you which profile fields matter</p>
+          <div class="fu"><span class="fn">Age range</span><span class="fb"><i style="width:94%"></i></span><span class="fv">94%</span></div>
+          <div class="fu"><span class="fn">City</span><span class="fb"><i style="width:81%"></i></span><span class="fv">81%</span></div>
+          <div class="fu"><span class="fn">Education</span><span class="fb"><i style="width:66%"></i></span><span class="fv">66%</span></div>
+          <div class="fu"><span class="fn">Family type</span><span class="fb"><i style="width:44%"></i></span><span class="fv">44%</span></div>
+          <div class="fu"><span class="fn">Diet</span><span class="fb"><i style="width:38%"></i></span><span class="fv">38%</span></div>
+          <div class="fu"><span class="fn">Income band</span><span class="fb"><i style="width:29%"></i></span><span class="fv">29%</span></div>
+          <div class="fu"><span class="fn">Horoscope</span><span class="fb"><i style="width:11%"></i></span><span class="fv">11%</span></div>
+          <div class="note"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div>Horoscope is barely used but takes onboarding time. Consider moving it below the fold in profile creation.</div></div>
+        </div>
+
+        <div class="card">
+          <h3>Conversion to Plus</h3>
+          <p class="csub">What triggers the upgrade</p>
+          <div class="fbar"><div class="fl"><span>Mutual accept → paywall shown</span><b>128</b></div><div class="ft"><i style="width:100%;background:#2C6E75"></i></div></div>
+          <div class="fbar"><div class="fl"><span>Viewed plans</span><b>71</b></div><div class="ft"><i style="width:55%;background:#3F8E95"></i></div></div>
+          <div class="fbar"><div class="fl"><span>Started payment</span><b>31</b></div><div class="ft"><i style="width:24%;background:#F4633A"></i></div></div>
+          <div class="fbar"><div class="fl"><span>Paid</span><b>24</b></div><div class="ft"><i style="width:19%;background:#1E3548"></i></div></div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div><div class="mini">Plan split</div><div style="font-family:'Baloo 2';font-weight:700;font-size:17px;color:var(--indigo);margin-top:2px">6 mo · 58%</div></div>
+            <div><div class="mini">Revenue, 30d</div><div style="font-family:'Baloo 2';font-weight:700;font-size:17px;color:var(--indigo);margin-top:2px">₹18,470</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Recent activity</h3>
+        <p class="csub">Live feed across the app</p>
+        <div class="alog" id="feedShort"></div>
+      </div>
+    </section>
+
+    <!-- REVIEW QUEUE -->
+    <section class="page" id="p-queue">
+      <div class="mhead"><div><h1>Review queue</h1><p>Profiles extracted from biodata PDFs, waiting for your check before the claim link goes out</p></div></div>
+      <div class="card">
+        <h3>7 drafts pending</h3>
+        <p class="csub">Amber flags are fields the extractor wasn't confident about — check those against the PDF</p>
+        <div id="queueList"></div>
+      </div>
+      <div class="note" style="margin-top:14px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div>Approving only sends the claim link. The profile stays unlisted until the member logs in and publishes it themselves — that's what keeps consent theirs, not yours.</div></div>
+    </section>
+
+    <!-- MEMBERS -->
+    <section class="page" id="p-users">
+      <div class="mhead"><div><h1>Members</h1><p>163 published profiles</p></div>
+        <div class="rangebtns"><button class="on">All</button><button>Plus</button><button>Inactive</button></div></div>
+      <div class="card" style="padding-bottom:4px">
+        <div class="tbl">
+          <table id="userTable"></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section class="page" id="p-act">
+      <div class="mhead"><div><h1>Activity</h1><p>Every meaningful action, newest first</p></div>
+        <div class="rangebtns"><button class="on">All</button><button>Interests</button><button>Logins</button><button>Payments</button></div></div>
+      <div class="card"><div class="alog" id="feedFull"></div></div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="page" id="p-mod">
+      <div class="mhead"><div><h1>Reports</h1><p>Flagged by members — act on every one</p></div></div>
+      <div class="card" style="padding-bottom:4px">
+        <div class="tbl"><table id="modTable"></table></div>
+      </div>
+      <div class="note" style="margin-top:14px"><svg viewBox="0 0 24 24"><path d="M12 3l7 3.5v5c0 4.8-3 8-7 9.5-4-1.5-7-4.7-7-9.5v-5L12 3z"/></svg><div>In a single-community app, a mishandled report travels faster than any marketing. Respond within 24 hours and tell the reporter what you did.</div></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"><span class="pearl"></span><span id="toastText"></span></div>
+
+<script>
+const P=n=>`https://randomuser.me/api/portraits/women/${n}.jpg`;
+const M=n=>`https://randomuser.me/api/portraits/men/${n}.jpg`;
+
+const I={
+ heart:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.8 5 6.2 5c1.9 0 3.3 1 4 2.3.7-1.3 2.1-2.3 4-2.3 3.4 0 5.5 3.4 3.7 7-2.5 4.4-9.5 9-9.5 9z"/></svg>',
+ check:'<svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>',
+ user:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>',
+ card:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/></svg>',
+ flag:'<svg viewBox="0 0 24 24"><path d="M5 21V4h13l-2.5 4L18 12H5"/></svg>'
+};
+
+const activity=[
+ {t:'i',x:'<b>Rutuja S.</b> expressed interest in <b>Amit K.</b> — "Would like to talk"',w:'4 min ago'},
+ {t:'p',x:'<b>Nikhil P.</b> subscribed to Plus — 6 months, ₹799',w:'22 min ago'},
+ {t:'a',x:'<b>Priya S.</b> accepted an interest from <b>Vivek N.</b> — chat opened',w:'1 hour ago'},
+ {t:'n',x:'<b>Manasi S.</b> published her profile — claimed from biodata',w:'2 hours ago'},
+ {t:'i',x:'<b>Sneha S.</b> expressed interest in <b>Rohan D.</b> — "Our families seem aligned"',w:'3 hours ago'},
+ {t:'n',x:'<b>Kirti S.</b> completed profile — added 3 photos and prompts',w:'4 hours ago'},
+ {t:'r',x:'<b>Anjali S.</b> reported a profile — reason: photo mismatch',w:'5 hours ago'},
+ {t:'p',x:'<b>Sagar M.</b> subscribed to Plus — 3 months, ₹499',w:'6 hours ago'},
+ {t:'a',x:'<b>Rutuja S.</b> declined an interest — sender not notified',w:'7 hours ago'},
+ {t:'n',x:'<b>Amit K.</b> logged in for the first time in 11 days',w:'8 hours ago'}
+];
+function actHTML(a){
+ const m={i:I.heart,a:I.check,n:I.user,p:I.card,r:I.flag};
+ return `<div class="aitem"><div class="adot ${a.t}">${m[a.t]}</div><div class="atext">${a.x}</div><div class="atime">${a.w}</div></div>`;
+}
+document.getElementById('feedShort').innerHTML=activity.slice(0,6).map(actHTML).join('');
+document.getElementById('feedFull').innerHTML=activity.map(actHTML).join('');
+
+/* review queue */
+const queue=[
+ {n:'Kavita Shimpi',m:"25 · Jalna · B.Sc",img:P(31),flags:[['Income band unclear',''],['Height read as 5\'4"',''],['Name & city confident','ok']]},
+ {n:'Rohan Shimpi',m:"29 · Pune · MBA",img:M(32),flags:[['Occupation ambiguous',''],['All other fields confident','ok']]},
+ {n:'Deepa Shimpi',m:"26 · Nashik · M.A.",img:P(56),flags:[['Marathi text — low OCR confidence',''],['Family details missing','']]}
+];
+document.getElementById('queueList').innerHTML=queue.map((q,i)=>`
+ <div class="rq" id="rq${i}">
+   <img src="${q.img}" alt="">
+   <div class="rqb">
+     <div class="rqn">${q.n}</div>
+     <div class="rqm">${q.m}</div>
+     <div class="flags">${q.flags.map(f=>`<span class="flag ${f[1]}">${f[0]}</span>`).join('')}</div>
+     <div class="rqacts">
+       <button class="abtn o" onclick="toast('Opening source PDF…')">View PDF</button>
+       <button class="abtn o" onclick="toast('Edit mode')">Edit fields</button>
+       <button class="abtn p" onclick="approve(${i})">Approve &amp; send claim link</button>
+     </div>
+   </div>
+ </div>`).join('');
+function approve(i){document.getElementById('rq'+i).style.display='none';toast('Claim link sent — profile stays unlisted until she publishes');}
+
+/* members */
+const users=[
+ {n:'Priya Shimpi',e:'priya.s@…',img:P(44),c:100,s:'Plus',act:'2 min ago',i:'14 sent · 9 got'},
+ {n:'Anjali Shimpi',e:'anjali@…',img:P(68),c:92,s:'Free',act:'1 hour ago',i:'6 sent · 11 got'},
+ {n:'Manasi Shimpi',e:'manasi.n@…',img:P(9),c:88,s:'Plus',act:'3 hours ago',i:'9 sent · 17 got'},
+ {n:'Sneha Shimpi',e:'sneha@…',img:P(52),c:74,s:'Free',act:'Yesterday',i:'4 sent · 6 got'},
+ {n:'Rutuja Shimpi',e:'rutuja.s@…',img:P(26),c:61,s:'Free',act:'6 days ago',i:'2 sent · 3 got'},
+ {n:'Kirti Shimpi',e:'kirti@…',img:P(33),c:45,s:'Free',act:'19 days ago',i:'0 sent · 1 got'}
+];
+document.getElementById('userTable').innerHTML=`
+ <thead><tr><th>Member</th><th>Completion</th><th>Plan</th><th>Interests</th><th>Last active</th><th></th></tr></thead>
+ <tbody>${users.map(u=>`
+  <tr>
+    <td><div class="uc"><img src="${u.img}" alt=""><div><div class="un">${u.n}</div><div class="ue">${u.e}</div></div></div></td>
+    <td><span class="tag ${u.c>=85?'green':u.c>=60?'amber':'red'}">${u.c}%</span></td>
+    <td><span class="tag ${u.s==='Plus'?'teal':'grey'}">${u.s}</span></td>
+    <td class="mini">${u.i}</td>
+    <td class="mini">${u.act}</td>
+    <td><div class="act"><button class="abtn o" onclick="toast('Opening ${u.n.split(' ')[0]}\\'s profile')">View</button></div></td>
+  </tr>`).join('')}</tbody>`;
+
+/* reports */
+const reports=[
+ {r:'Anjali S.',a:'Rohan D.',why:'Photo does not match profile',w:'5 hours ago',s:'New'},
+ {r:'Priya S.',a:'Unknown user',why:'Asked for money in chat',w:'Yesterday',s:'New'}
+];
+document.getElementById('modTable').innerHTML=`
+ <thead><tr><th>Reported by</th><th>About</th><th>Reason</th><th>When</th><th>Status</th><th></th></tr></thead>
+ <tbody>${reports.map((r,i)=>`
+  <tr id="mr${i}">
+    <td class="un" style="font-weight:600;color:var(--indigo)">${r.r}</td>
+    <td>${r.a}</td>
+    <td><span class="tag ${r.why.includes('money')?'red':'amber'}">${r.why}</span></td>
+    <td class="mini">${r.w}</td>
+    <td><span class="tag grey">${r.s}</span></td>
+    <td><div class="act">
+      <button class="abtn o" onclick="toast('Opening chat transcript')">Review</button>
+      <button class="abtn d" onclick="susp(${i})">Suspend</button>
+    </div></td>
+  </tr>`).join('')}</tbody>`;
+function susp(i){document.getElementById('mr'+i).style.opacity='.45';toast('Account suspended · reporter notified');}
+
+/* nav */
+document.getElementById('snav').addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ document.querySelectorAll('.snav button').forEach(x=>x.classList.toggle('on',x===b));
+ document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+ window.scrollTo({top:0,behavior:'instant'});
+});
+document.querySelectorAll('.rangebtns').forEach(g=>g.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ [...g.children].forEach(x=>x.classList.toggle('on',x===b));
+}));
+function toast(m){const t=document.getElementById('toast');document.getElementById('toastText').textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2400);}
+</script>
+</body>
+</html>

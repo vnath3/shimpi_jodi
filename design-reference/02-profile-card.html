@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Shimpi Jodi — Profile Card &amp; Profile View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1E3548;
+  --indigo-70:#4A5F71;
+  --teal:#2C6E75;
+  --teal-tint:#E8F1F1;
+  --coral:#F4633A;
+  --coral-tint:#FDEDE7;
+  --cream:#FAF7F2;
+  --surface:#FFFFFF;
+  --ink:#141A1F;
+  --muted:#7C868F;
+  --line:#E7E3DC;
+  --radius:18px;
+  --shadow:0 2px 10px rgba(30,53,72,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Inter',-apple-system,sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;}
+.app{max-width:440px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;overflow-x:hidden;}
+
+/* ---------- Header ---------- */
+.header{
+  position:sticky;top:0;z-index:40;
+  background:rgba(250,247,242,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{display:flex;align-items:center;gap:9px;}
+.brand .mark{width:26px;height:26px;flex-shrink:0;}
+.brand .name{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:19px;color:var(--indigo);letter-spacing:-.2px;}
+.hdr-actions{display:flex;gap:6px;}
+.icon-btn{
+  width:38px;height:38px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;transition:background .15s;
+}
+.icon-btn:active{background:var(--teal-tint);}
+.icon-btn svg{width:21px;height:21px;stroke:var(--indigo);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.pearl-dot{
+  position:absolute;top:7px;right:8px;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--coral);border:2px solid var(--cream);
+}
+
+/* ---------- Daily strip ---------- */
+.daily{padding:18px 16px 6px;}
+.daily h1{
+  font-family:'Baloo 2',sans-serif;
+  font-size:22px;font-weight:700;margin:0 0 2px;color:var(--indigo);letter-spacing:-.3px;
+}
+.daily p{margin:0;font-size:13px;color:var(--muted);}
+.daily .count{color:var(--teal);font-weight:600;}
+
+/* ---------- Profile card ---------- */
+.feed{padding:14px 16px 100px;display:flex;flex-direction:column;gap:16px;}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease;
+}
+.card:active{transform:scale(.988);}
+.card-photo{
+  position:relative;height:232px;
+  background-size:cover;background-position:center;
+  display:flex;align-items:flex-end;
+}
+.card-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(20,26,31,.78) 0%,rgba(20,26,31,.15) 42%,transparent 66%);
+}
+.photo-body{position:relative;z-index:2;padding:14px 16px;width:100%;}
+.photo-name{
+  font-family:'Baloo 2',sans-serif;font-weight:700;font-size:22px;color:#fff;
+  letter-spacing:-.2px;line-height:1.2;display:flex;align-items:center;gap:7px;
+}
+.verified{width:16px;height:16px;flex-shrink:0;}
+.photo-sub{font-size:13px;color:rgba(255,255,255,.86);margin-top:1px;}
+.photo-count{
+  position:absolute;top:12px;right:12px;z-index:2;
+  background:rgba(20,26,31,.55);backdrop-filter:blur(6px);
+  color:#fff;font-size:11px;font-weight:500;
+  padding:4px 9px;border-radius:999px;
+}
+
+.card-body{padding:14px 16px 4px;}
+.facts{display:flex;flex-wrap:wrap;gap:7px;}
+.fact{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--cream);border:1px solid var(--line);
+  border-radius:999px;padding:5px 11px;
+  font-size:12.5px;color:#3B454E;font-weight:500;
+}
+.fact svg{width:13px;height:13px;stroke:var(--teal);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+
+/* prompt block — the personality hook */
+.prompt{
+  margin:14px 0 4px;padding:13px 14px;
+  background:var(--teal-tint);
+  border-radius:14px;
+  border-left:3px solid var(--teal);
+}
+.prompt .q{font-size:11.5px;color:var(--teal);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
+.prompt .a{font-size:14px;color:var(--indigo);line-height:1.5;}
+
+/* compatibility */
+.compat{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.compat-chip{
+  font-size:11.5px;font-weight:500;
+  padding:4px 10px;border-radius:999px;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.compat-chip.match{background:var(--coral-tint);color:#B8401C;}
+.compat-chip.diff{background:#F2F3F4;color:#6B747C;}
+.compat-chip svg{width:11px;height:11px;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.compat-chip.match svg{stroke:var(--coral);}
+.compat-chip.diff svg{stroke:#9BA3AA;}
+
+.card-actions{
+  display:flex;gap:9px;padding:14px 16px 16px;
+}
+.btn{
+  flex:1;border-radius:13px;padding:12px;
+  font-family:'Baloo 2',sans-serif;font-weight:600;font-size:14.5px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:transform .12s, background .15s;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--coral);color:#fff;}
+.btn-primary.sent{background:var(--coral-tint);color:#B8401C;}
+.btn-ghost{
+  background:transparent;border:1.5px solid var(--line);color:var(--indigo);
+  flex:0 0 52px;
+}
+.btn svg{width:17px;height:17px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.btn-primary svg{stroke:#fff;}
+.btn-primary.sent svg{stroke:#B8401C;fill:#B8401C;}
+.btn-ghost svg{stroke:var(--indigo-70);}
+
+/* ---------- Bottom nav ---------- */
+.nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:440px;z-index:50;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:5px 0;position:relative;
+}
+.nav-item svg{width:22px;height:22px;stroke:var(--muted);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.nav-item span{font-size:10px;color:var(--muted);font-weight:500;}
+.nav-item.active svg{stroke:var(--indigo);}
+.nav-item.active span{color:var(--indigo);font-weight:600;}
+.nav-item.active::before{
+  content:'';position:absolute;top:-8px;
+  width:5px;height:5px;border-radius:50%;background:var(--coral);
+}
+.nav-badge{
+  position:absolute;top:2px;right:calc(50% - 18px);
+  min-width:16px;height:16px;padding:0 4px;border-radius:999px;
+  background:var(--coral);color:#fff;font-size:9.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ---------- Full profile sheet ---------- */
+.sheet-backdrop{
+  position:fixed;inset:0;z-index:60;
+  background:rgba(20,26,31,.4);
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.sheet-backdrop.open{opacity:1;pointer-events:auto;}
+.sheet{
+  position:fixed;bottom:0;left:50%;transform:translate(-50%,100%);
+  width:100%;max-width:440px;height:96vh;z-index:70;
+  background:var(--cream);
+  border-radius:22px 22px 0 0;
+  overflow-y:auto;overscroll-behavior:contain;
+  transition:transform .32s cubic-bezier(.32,.72,0,1);
+}
+.sheet.open{transform:translate(-50%,0);}
+.sheet-handle{
+  position:sticky;top:0;z-index:5;
+  background:var(--cream);padding:10px 0 6px;
+  display:flex;justify-content:center;
+}
+.sheet-handle div{width:38px;height:4px;border-radius:999px;background:#D4CFC6;}
+.sheet-close{
+  position:absolute;top:14px;right:14px;z-index:6;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.9);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);
+}
+.sheet-close svg{width:16px;height:16px;stroke:var(--indigo);stroke-width:2.2;fill:none;stroke-linecap:round;}
+
+.sheet-hero{
+  height:300px;background-size:cover;background-position:center;
+  margin:0 16px;border-radius:var(--radius);position:relative;
+  display:flex;align-items:flex-end;
+}
+.sheet-hero::after{
+  content:'';position:absolute;inset:0;border-radius:var(--radius);
+  background:linear-gradient(to top,rgba(20,26,31,.8) 0%,transparent 55%);
+}
+.sheet-hero .photo-body{padding:16px 18px;}
+.sheet-hero .photo-name{font-size:25px;}
+
+.sheet-section{
+  margin:16px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px;box-shadow:var(--shadow);
+}
+.sheet-section h3{
+  font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:600;
+  color:var(--teal);text-transform:uppercase;letter-spacing:.05em;
+  margin:0 0 12px;display:flex;align-items:center;gap:7px;
+}
+.sheet-section h3 svg{width:15px;height:15px;stroke:var(--teal);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;}
+.detail{min-width:0;}
+.detail .k{font-size:11px;color:var(--muted);margin-bottom:2px;}
+.detail .v{font-size:14px;color:var(--ink);font-weight:500;line-height:1.35;}
+.detail.full{grid-column:1 / -1;}
+
+.about-text{font-size:14.5px;line-height:1.62;color:#2B333A;}
+
+.compat-row{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:11px 0;border-bottom:1px solid var(--line);
+}
+.compat-row:last-child{border-bottom:none;padding-bottom:0;}
+.compat-row:first-of-type{padding-top:0;}
+.compat-icon{
+  width:26px;height:26px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.compat-icon.yes{background:var(--coral-tint);}
+.compat-icon.no{background:#F2F3F4;}
+.compat-icon svg{width:14px;height:14px;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+.compat-icon.yes svg{stroke:var(--coral);}
+.compat-icon.no svg{stroke:#9BA3AA;}
+.compat-text .t{font-size:14px;font-weight:500;color:var(--ink);}
+.compat-text .s{font-size:12.5px;color:var(--muted);margin-top:1px;}
+
+.prompt-block{
+  background:var(--teal-tint);border-radius:14px;
+  padding:13px 14px;margin-bottom:10px;
+}
+.prompt-block:last-child{margin-bottom:0;}
+.prompt-block .q{font-size:11.5px;color:var(--teal);font-weight:600;margin-bottom:4px;}
+.prompt-block .a{font-size:14.5px;color:var(--indigo);line-height:1.5;}
+
+.sheet-cta{
+  position:sticky;bottom:0;
+  background:linear-gradient(to top,var(--cream) 62%,transparent);
+  padding:16px 16px calc(18px + env(safe-area-inset-bottom));
+  display:flex;gap:9px;
+}
+
+.locked-note{
+  display:flex;align-items:center;gap:9px;
+  background:#fff;border:1px dashed var(--line);
+  border-radius:13px;padding:11px 13px;margin:0 16px 16px;
+  font-size:12.5px;color:var(--muted);
+}
+.locked-note svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:1.8;flex-shrink:0;stroke-linecap:round;stroke-linejoin:round;}
+.locked-note b{color:var(--indigo);font-weight:600;}
+
+/* toast */
+.toast{
+  position:fixed;bottom:96px;left:50%;transform:translate(-50%,20px);
+  background:var(--indigo);color:#fff;
+  padding:11px 18px;border-radius:999px;
+  font-size:13.5px;font-weight:500;z-index:90;
+  opacity:0;pointer-events:none;transition:all .25s;
+  display:flex;align-items:center;gap:8px;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+.toast .pearl{width:8px;height:8px;border-radius:50%;background:var(--coral);}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 96 96">
+        <path d="M48 80 C 20 73, 13 42, 27 20" stroke="#2C6E75" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M48 80 C 76 73, 83 42, 69 20" stroke="#1E3548" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle cx="48" cy="42" r="8.5" fill="#F4633A"/>
+      </svg>
+      <span class="name">Shimpi Jodi</span>
+    </div>
+    <div class="hdr-actions">
+      <button class="icon-btn" aria-label="Filters">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 5-2 6-2 6h16s-2-1-2-6z"/><path d="M10 20a2 2 0 004 0"/></svg>
+        <span class="pearl-dot"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Daily heading -->
+  <div class="daily">
+    <h1>Today for you</h1>
+    <p><span class="count">5 profiles</span> · chosen from your filters</p>
+  </div>
+
+  <!-- Feed -->
+  <main class="feed" id="feed"></main>
+
+  <!-- Bottom nav -->
+  <nav class="nav">
+    <button class="nav-item active">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+      <span>Discover</span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.8 5 6.2 5c1.9 0 3.3 1 4 2.3.7-1.3 2.1-2.3 4-2.3 3.4 0 5.5 3.4 3.7 7-2.5 4.4-9.5 9-9.5 9z"/></svg>
+      <span>Interests</span>
+      <span class="nav-badge">3</span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/></svg>
+      <span>Chat</span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="10" r="3"/><path d="M7 18.5c1-3 3-4.2 5-4.2s4 1.2 5 4.2"/></svg>
+      <span>Profile</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Full profile sheet -->
+<div class="sheet-backdrop" id="backdrop"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"><div></div></div>
+  <button class="sheet-close" id="sheetClose" aria-label="Close">
+    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div id="sheetContent"></div>
+</div>
+
+<div class="toast" id="toast"><span class="pearl"></span><span id="toastText"></span></div>
+
+<script>
+const profiles = [
+  {
+    id:1, name:'Priya Shimpi', age:26, height:"5'4\"", city:'Pune',
+    photo:'linear-gradient(135deg,#3E6B78 0%,#1E3548 100%)', photos:4, verified:true,
+    edu:'M.Com', job:'Chartered Accountant', income:'₹8–12 L',
+    facts:[['edu','M.Com'],['job','CA at Deloitte'],['loc','Pune']],
+    prompt:{q:'A Sunday at my home looks like', a:'Filter coffee, my mother\'s cooking playing second fiddle to her opinions, and me pretending to help.'},
+    prompts:[
+      {q:'A Sunday at my home looks like', a:'Filter coffee, my mother\'s cooking playing second fiddle to her opinions, and me pretending to help.'},
+      {q:'In marriage, my one non-negotiable is', a:'That we can disagree out loud without it becoming a three-day silence.'},
+      {q:'My family teases me about', a:'Reading three books at once and finishing none of them.'}
+    ],
+    compat:[
+      {yes:true, t:'Both prefer a nuclear setup', s:'You both chose this in your preferences'},
+      {yes:true, t:'Both value career growth', s:'Similar answers on work-life priorities'},
+      {yes:false, t:'Different on relocation', s:'She prefers to stay in Pune; you\'re open to moving'}
+    ],
+    family:{father:'Retired bank manager', mother:'Homemaker', siblings:'1 younger brother', type:'Nuclear', native:'Nashik'},
+    life:{diet:'Vegetarian', horoscope:'Flexible', relocate:'Prefers Pune', lang:'Marathi, Hindi, English'},
+    about:'I audit for a living, which means I notice details — including the good ones. Looking for someone steady and funny, who has their own thing going on and lets me have mine.'
+  },
+  {
+    id:2, name:'Anjali Shimpi', age:24, height:"5'2\"", city:'Chh. Sambhajinagar',
+    photo:'linear-gradient(135deg,#5A7F6E 0%,#22333B 100%)', photos:6, verified:true,
+    edu:'B.Arch', job:'Architect', income:'₹5–8 L',
+    facts:[['edu','B.Arch'],['job','Architect'],['loc','Ch. Sambhajinagar']],
+    prompt:{q:'My family teases me about', a:'Redesigning every room I walk into, out loud, uninvited.'},
+    prompts:[
+      {q:'My family teases me about', a:'Redesigning every room I walk into, out loud, uninvited.'},
+      {q:'A Sunday at my home looks like', a:'Sketching on the terrace till the chai goes cold, then reheating it and doing it again.'},
+      {q:'In marriage, my one non-negotiable is', a:'Both of us keep working. I\'ve wanted this career since I was nine.'}
+    ],
+    compat:[
+      {yes:true, t:'Both open to relocating', s:'Neither of you is fixed to one city'},
+      {yes:true, t:'Same native district', s:'Both families from Marathwada'},
+      {yes:false, t:'Different on family setup', s:'She prefers joint; you chose nuclear'}
+    ],
+    family:{father:'Businessman — textiles', mother:'School teacher', siblings:'2 elder sisters, married', type:'Joint', native:'Jalna'},
+    life:{diet:'Vegetarian', horoscope:'Important', relocate:'Open', lang:'Marathi, Hindi, English'},
+    about:'Architect, terrible cook, decent listener. I want a partner who has opinions and shares them, and a home that actually feels like both of us built it.'
+  },
+  {
+    id:3, name:'Sneha Shimpi', age:27, height:"5'5\"", city:'Nashik',
+    photo:'linear-gradient(135deg,#7A5C4E 0%,#2A2119 100%)', photos:3, verified:false,
+    edu:'MBA', job:'Marketing Manager', income:'₹12–18 L',
+    facts:[['edu','MBA'],['job','Marketing Mgr'],['loc','Nashik']],
+    prompt:{q:'In marriage, my one non-negotiable is', a:'Sunday mornings stay unscheduled. Everything else is negotiable.'},
+    prompts:[
+      {q:'In marriage, my one non-negotiable is', a:'Sunday mornings stay unscheduled. Everything else is negotiable.'},
+      {q:'A Sunday at my home looks like', a:'Nobody speaks before 10am. It\'s a household rule and it is enforced.'},
+      {q:'My family teases me about', a:'Having a spreadsheet for literally everything, including this.'}
+    ],
+    compat:[
+      {yes:true, t:'Both career-focused', s:'Similar priorities on work'},
+      {yes:true, t:'Both flexible on horoscope', s:'Neither treats it as a dealbreaker'},
+      {yes:false, t:'Different on diet', s:'She\'s non-vegetarian; you prefer vegetarian'}
+    ],
+    family:{father:'Doctor', mother:'Doctor', siblings:'1 elder brother, married', type:'Nuclear', native:'Nashik'},
+    life:{diet:'Non-vegetarian', horoscope:'Flexible', relocate:'Open within Maharashtra', lang:'Marathi, Hindi, English'},
+    about:'I run marketing for a mid-size brand and I love it. Outside that: trekking, bad reality TV, and a long-running argument with my brother about cricket.'
+  }
+];
+
+const ic = {
+  edu:'<svg viewBox="0 0 24 24"><path d="M12 5L2 9l10 4 10-4-10-4z"/><path d="M6 11v5c0 1 3 2.5 6 2.5s6-1.5 6-2.5v-5"/></svg>',
+  job:'<svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2"/></svg>',
+  loc:'<svg viewBox="0 0 24 24"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>',
+  minus:'<svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg>',
+  heart:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.8 5 6.2 5c1.9 0 3.3 1 4 2.3.7-1.3 2.1-2.3 4-2.3 3.4 0 5.5 3.4 3.7 7-2.5 4.4-9.5 9-9.5 9z"/></svg>',
+  bookmark:'<svg viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg>',
+  verified:'<svg class="verified" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 1.9 3.2-.3 1 3.1 2.6 1.9-1.3 3 1.3 3-2.6 1.9-1 3.1-3.2-.3L12 22l-2.6-1.9-3.2.3-1-3.1L2.6 15.4l1.3-3-1.3-3 2.6-1.9 1-3.1 3.2.3L12 2z" fill="#F4633A"/><path d="M8.6 12.2l2.3 2.3 4.5-4.7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  family:'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2.2-5 5-5s5 2 5 5M13 20c0-3 2.2-5 5-5s3 1.5 3 4"/></svg>',
+  life:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  spark:'<svg viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>',
+  quote:'<svg viewBox="0 0 24 24"><path d="M7 15c-2 0-3-1.3-3-3.2C4 8.6 6 6 9 5M17 15c-2 0-3-1.3-3-3.2 0-3.2 2-5.8 5-6.8"/></svg>',
+  lock:'<svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>'
+};
+
+const sent = new Set();
+
+function cardHTML(p){
+  return `
+  <article class="card" data-id="${p.id}">
+    <div class="card-photo" style="background:${p.photo}">
+      <span class="photo-count">1 / ${p.photos}</span>
+      <div class="photo-body">
+        <div class="photo-name">${p.name.split(' ')[0]}, ${p.age} ${p.verified?ic.verified:''}</div>
+        <div class="photo-sub">${p.height} · ${p.city}</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="facts">
+        ${p.facts.map(f=>`<span class="fact">${ic[f[0]]}${f[1]}</span>`).join('')}
+      </div>
+      <div class="prompt">
+        <div class="q">${p.prompt.q}</div>
+        <div class="a">${p.prompt.a}</div>
+      </div>
+      <div class="compat">
+        ${p.compat.map(c=>`<span class="compat-chip ${c.yes?'match':'diff'}">${c.yes?ic.check:ic.minus}${c.t}</span>`).join('')}
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" data-act="save" aria-label="Shortlist">${ic.bookmark}</button>
+      <button class="btn btn-primary ${sent.has(p.id)?'sent':''}" data-act="interest">
+        ${ic.heart}${sent.has(p.id)?'Interest sent':'Express Interest'}
+      </button>
+    </div>
+  </article>`;
+}
+
+function sheetHTML(p){
+  return `
+  <div class="sheet-hero" style="background:${p.photo}">
+    <div class="photo-body">
+      <div class="photo-name">${p.name}, ${p.age} ${p.verified?ic.verified:''}</div>
+      <div class="photo-sub">${p.height} · ${p.city} · ${p.edu}</div>
+    </div>
+  </div>
+
+  <div class="sheet-section">
+    <h3>${ic.quote} In her words</h3>
+    <p class="about-text">${p.about}</p>
+  </div>
+
+  <div class="sheet-section">
+    <h3>${ic.spark} Why you might fit</h3>
+    ${p.compat.map(c=>`
+      <div class="compat-row">
+        <div class="compat-icon ${c.yes?'yes':'no'}">${c.yes?ic.check:ic.minus}</div>
+        <div class="compat-text"><div class="t">${c.t}</div><div class="s">${c.s}</div></div>
+      </div>`).join('')}
+  </div>
+
+  <div class="sheet-section">
+    <h3>${ic.quote} Prompts</h3>
+    ${p.prompts.map(q=>`<div class="prompt-block"><div class="q">${q.q}</div><div class="a">${q.a}</div></div>`).join('')}
+  </div>
+
+  <div class="sheet-section">
+    <h3>${ic.job} Education &amp; work</h3>
+    <div class="detail-grid">
+      <div class="detail"><div class="k">Education</div><div class="v">${p.edu}</div></div>
+      <div class="detail"><div class="k">Occupation</div><div class="v">${p.job}</div></div>
+      <div class="detail"><div class="k">Income band</div><div class="v">${p.income}</div></div>
+      <div class="detail"><div class="k">Location</div><div class="v">${p.city}</div></div>
+    </div>
+  </div>
+
+  <div class="sheet-section">
+    <h3>${ic.family} Family</h3>
+    <div class="detail-grid">
+      <div class="detail"><div class="k">Father</div><div class="v">${p.family.father}</div></div>
+      <div class="detail"><div class="k">Mother</div><div class="v">${p.family.mother}</div></div>
+      <div class="detail"><div class="k">Siblings</div><div class="v">${p.family.siblings}</div></div>
+      <div class="detail"><div class="k">Family type</div><div class="v">${p.family.type}</div></div>
+      <div class="detail full"><div class="k">Native place</div><div class="v">${p.family.native}</div></div>
+    </div>
+  </div>
+
+  <div class="sheet-section">
+    <h3>${ic.life} Lifestyle</h3>
+    <div class="detail-grid">
+      <div class="detail"><div class="k">Diet</div><div class="v">${p.life.diet}</div></div>
+      <div class="detail"><div class="k">Horoscope</div><div class="v">${p.life.horoscope}</div></div>
+      <div class="detail"><div class="k">Relocation</div><div class="v">${p.life.relocate}</div></div>
+      <div class="detail"><div class="k">Languages</div><div class="v">${p.life.lang}</div></div>
+    </div>
+  </div>
+
+  <div class="locked-note">
+    ${ic.lock}
+    <div>Contact details and chat open once <b>she accepts your interest</b> and either of you has a plan.</div>
+  </div>
+
+  <div class="sheet-cta">
+    <button class="btn btn-ghost" data-act="save">${ic.bookmark}</button>
+    <button class="btn btn-primary ${sent.has(p.id)?'sent':''}" data-act="interest" data-id="${p.id}">
+      ${ic.heart}${sent.has(p.id)?'Interest sent':'Express Interest'}
+    </button>
+  </div>`;
+}
+
+const feed = document.getElementById('feed');
+const sheet = document.getElementById('sheet');
+const backdrop = document.getElementById('backdrop');
+const sheetContent = document.getElementById('sheetContent');
+const toast = document.getElementById('toast');
+const toastText = document.getElementById('toastText');
+
+function render(){ feed.innerHTML = profiles.map(cardHTML).join(''); }
+render();
+
+function showToast(msg){
+  toastText.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>toast.classList.remove('show'), 2200);
+}
+
+function openSheet(p){
+  sheetContent.innerHTML = sheetHTML(p);
+  sheet.classList.add('open');
+  backdrop.classList.add('open');
+  sheet.scrollTop = 0;
+  document.body.style.overflow='hidden';
+}
+function closeSheet(){
+  sheet.classList.remove('open');
+  backdrop.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+feed.addEventListener('click', e=>{
+  const card = e.target.closest('.card');
+  if(!card) return;
+  const id = +card.dataset.id;
+  const p = profiles.find(x=>x.id===id);
+  const actBtn = e.target.closest('[data-act]');
+  if(actBtn){
+    e.stopPropagation();
+    if(actBtn.dataset.act==='interest'){
+      if(sent.has(id)){ showToast('Interest already sent'); return; }
+      sent.add(id); render();
+      showToast('Interest sent to ' + p.name.split(' ')[0]);
+    } else {
+      showToast('Saved to shortlist');
+    }
+    return;
+  }
+  openSheet(p);
+});
+
+sheetContent.addEventListener('click', e=>{
+  const actBtn = e.target.closest('[data-act]');
+  if(!actBtn) return;
+  if(actBtn.dataset.act==='interest'){
+    const id = +actBtn.dataset.id;
+    const p = profiles.find(x=>x.id===id);
+    if(sent.has(id)){ showToast('Interest already sent'); return; }
+    sent.add(id);
+    actBtn.classList.add('sent');
+    actBtn.innerHTML = ic.heart + 'Interest sent';
+    render();
+    showToast('Interest sent to ' + p.name.split(' ')[0]);
+  } else {
+    showToast('Saved to shortlist');
+  }
+});
+
+document.getElementById('sheetClose').addEventListener('click', closeSheet);
+backdrop.addEventListener('click', closeSheet);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Shimpi Jodi — Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1E3548;--indigo-70:#4A5F71;--teal:#2C6E75;--teal-tint:#E8F1F1;
+  --coral:#F4633A;--coral-tint:#FDEDE7;--cream:#FAF7F2;--surface:#FFF;
+  --ink:#141A1F;--muted:#7C868F;--line:#E7E3DC;--radius:18px;
+  --shadow:0 2px 10px rgba(30,53,72,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Inter',-apple-system,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;}
+input,select,textarea{font-family:inherit;font-size:16px;}
+.app{max-width:440px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden;}
+
+/* progress */
+.topbar{position:sticky;top:0;z-index:30;background:var(--cream);padding:12px 16px 10px;display:flex;align-items:center;gap:12px;}
+.topbar.hidden{display:none;}
+.back{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.back:active{background:var(--teal-tint);}
+.back svg{width:19px;height:19px;stroke:var(--indigo);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.progress{flex:1;height:4px;background:var(--line);border-radius:999px;overflow:hidden;}
+.progress i{display:block;height:100%;background:var(--teal);border-radius:999px;transition:width .4s cubic-bezier(.4,0,.2,1);width:0;}
+.stepno{font-size:12px;color:var(--muted);font-weight:500;flex-shrink:0;}
+
+.screen{display:none;padding:8px 20px 130px;animation:fade .32s ease both;}
+.screen.on{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+h1{font-family:'Baloo 2',sans-serif;font-size:26px;font-weight:700;color:var(--indigo);margin:0 0 6px;letter-spacing:-.4px;line-height:1.25;}
+.lede{font-size:14.5px;color:var(--muted);margin:0 0 24px;line-height:1.6;}
+
+/* footer cta */
+.footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:40;background:linear-gradient(to top,var(--cream) 66%,transparent);padding:14px 20px calc(18px + env(safe-area-inset-bottom));}
+.btn{width:100%;border-radius:14px;padding:14px;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s,opacity .2s;}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:var(--coral);color:#fff;}
+.btn-primary:disabled{background:#E3DED6;color:#A9A79F;}
+.btn-text{background:none;color:var(--teal);font-size:14px;padding:11px;}
+.btn svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ---------- 0 welcome ---------- */
+.welcome{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 28px 40px;}
+.welcome .mark{width:88px;height:88px;margin-bottom:22px;}
+.welcome h1{font-size:32px;margin-bottom:8px;}
+.welcome .tagline{font-size:15px;color:var(--indigo-70);margin:0 0 4px;}
+.welcome .sub{font-size:13.5px;color:var(--muted);max-width:270px;margin:0 auto 34px;line-height:1.6;}
+.welcome .btn{max-width:300px;}
+.tribute{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:11px;color:#A8AFB5;padding:0 30px;line-height:1.5;}
+.valve-l,.valve-r{transform-origin:48px 80px;}
+.welcome .valve-l{animation:openL .7s .2s cubic-bezier(.4,1.2,.5,1) both;}
+.welcome .valve-r{animation:openR .7s .2s cubic-bezier(.4,1.2,.5,1) both;}
+.welcome .pearl{animation:pearlIn .5s .55s cubic-bezier(.34,1.5,.5,1) both;}
+@keyframes openL{from{transform:rotate(18deg);}to{transform:rotate(0);}}
+@keyframes openR{from{transform:rotate(-18deg);}to{transform:rotate(0);}}
+@keyframes pearlIn{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+/* ---------- fields ---------- */
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;color:var(--muted);font-weight:500;margin-bottom:6px;}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--surface);border:1.5px solid var(--line);
+  border-radius:13px;padding:13px 14px;color:var(--ink);outline:none;transition:border-color .18s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237C868F' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-size:17px;padding-right:40px;}
+.field textarea{resize:none;min-height:88px;line-height:1.55;}
+.hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* OTP */
+.otp{display:flex;gap:9px;margin:6px 0 4px;}
+.otp input{flex:1;text-align:center;font-size:22px;font-weight:600;font-family:'Baloo 2',sans-serif;padding:14px 0;color:var(--indigo);}
+.resend{font-size:13px;color:var(--muted);text-align:center;margin-top:14px;}
+.resend b{color:var(--teal);font-weight:600;}
+
+/* ---------- claim card ---------- */
+.found{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:16px;}
+.found-top{display:flex;align-items:center;gap:13px;margin-bottom:16px;}
+.found-top img{width:58px;height:58px;border-radius:16px;object-fit:cover;background:#DDD8D0;}
+.found-top .n{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:18px;color:var(--indigo);}
+.found-top .m{font-size:12.5px;color:var(--muted);margin-top:1px;}
+.found-rows{border-top:1px solid var(--line);padding-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:13px 12px;}
+.frow .k{font-size:11px;color:var(--muted);}
+.frow .v{font-size:14px;font-weight:500;margin-top:1px;}
+.frow.full{grid-column:1/-1;}
+.source-note{display:flex;gap:9px;align-items:flex-start;background:var(--teal-tint);border-radius:13px;padding:12px 13px;font-size:12.5px;color:#2A5459;line-height:1.55;margin-bottom:16px;}
+.source-note svg{width:16px;height:16px;stroke:var(--teal);fill:none;stroke-width:1.9;flex-shrink:0;margin-top:1px;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ---------- photos ---------- */
+.photogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px;}
+.pslot{aspect-ratio:3/4;border-radius:14px;border:1.5px dashed var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative;overflow:hidden;}
+.pslot.filled{border-style:solid;border-color:transparent;}
+.pslot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.pslot svg{width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.pslot span{font-size:10.5px;color:var(--muted);}
+.pslot .primary{position:absolute;bottom:6px;left:6px;z-index:2;background:var(--coral);color:#fff;font-size:9px;font-weight:700;padding:3px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;}
+.pslot .x{position:absolute;top:6px;right:6px;z-index:2;width:20px;height:20px;border-radius:50%;background:rgba(15,22,28,.6);display:flex;align-items:center;justify-content:center;}
+.pslot .x svg{width:11px;height:11px;stroke:#fff;stroke-width:2.6;}
+
+/* ---------- prompts ---------- */
+.pcard{background:var(--surface);border:1.5px solid var(--line);border-radius:15px;padding:14px;margin-bottom:11px;transition:border-color .18s;}
+.pcard.done{border-color:var(--teal);}
+.pcard .sel{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.pcard .q{font-size:13.5px;font-weight:600;color:var(--indigo);flex:1;}
+.pcard .num{width:22px;height:22px;border-radius:50%;background:var(--cream);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;}
+.pcard.done .num{background:var(--teal);border-color:var(--teal);color:#fff;}
+.pcard select{margin-top:0;border:none;padding:0;background:none;font-size:13.5px;font-weight:600;color:var(--indigo);width:100%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232C6E75' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0 center;background-size:15px;appearance:none;padding-right:22px;}
+.pcard textarea{margin-top:10px;border:none;background:var(--cream);border-radius:11px;padding:11px;min-height:70px;font-size:14px;}
+.pcard textarea:focus{border:none;outline:1.5px solid var(--teal);}
+.charcount{font-size:11px;color:var(--muted);text-align:right;margin-top:5px;}
+
+/* ---------- consent ---------- */
+.consent-item{display:flex;gap:12px;background:var(--surface);border:1.5px solid var(--line);border-radius:15px;padding:14px;margin-bottom:11px;transition:border-color .18s;}
+.consent-item.on{border-color:var(--teal);}
+.cbox{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .18s;}
+.consent-item.on .cbox{background:var(--teal);border-color:var(--teal);}
+.cbox svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .18s;}
+.consent-item.on .cbox svg{opacity:1;}
+.ctext .t{font-size:14px;font-weight:500;line-height:1.4;}
+.ctext .s{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.ctext a{color:var(--teal);text-decoration:underline;}
+
+/* ---------- success ---------- */
+.success{min-height:calc(100vh - 60px);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px 12px 120px;}
+.success .mark{width:80px;height:80px;margin-bottom:20px;}
+.success h1{font-size:27px;}
+.success p{font-size:14.5px;color:var(--muted);max-width:290px;line-height:1.6;margin:0 0 26px;}
+.meter{width:100%;max-width:300px;background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:var(--shadow);}
+.meter .mrow{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:9px;}
+.meter .mrow b{font-family:'Baloo 2',sans-serif;color:var(--teal);font-size:14px;}
+.mbar{height:7px;background:var(--line);border-radius:999px;overflow:hidden;}
+.mbar i{display:block;height:100%;background:var(--teal);border-radius:999px;width:0;transition:width 1s .3s cubic-bezier(.4,0,.2,1);}
+.meter .tip{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5;text-align:left;}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar hidden" id="topbar">
+    <button class="back" id="backBtn"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="progress"><i id="pbar"></i></div>
+    <span class="stepno" id="stepno"></span>
+  </div>
+
+  <!-- 0 · Welcome -->
+  <section class="screen on" data-step="0">
+    <div class="welcome">
+      <svg class="mark" viewBox="0 0 96 96">
+        <path class="valve-l" d="M48 80 C 20 73, 13 42, 27 20" stroke="#2C6E75" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path class="valve-r" d="M48 80 C 76 73, 83 42, 69 20" stroke="#1E3548" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle class="pearl" cx="48" cy="42" r="9" fill="#F4633A"/>
+      </svg>
+      <h1>Shimpi Jodi</h1>
+      <p class="tagline">A matrimony space for our community</p>
+      <p class="sub">Profiles you can read in one glance. Verified families. No endless scrolling.</p>
+      <button class="btn btn-primary" onclick="go(1)">Get started</button>
+      <button class="btn btn-text" onclick="go(1)">I already have a profile</button>
+      <div class="tribute">In memory of Dr. R. P. Nath<br>Vice-Chancellor, Dr. B. A. M. University</div>
+    </div>
+  </section>
+
+  <!-- 1 · Email -->
+  <section class="screen" data-step="1">
+    <h1>What's your email?</h1>
+    <p class="lede">We'll send a 6-digit code. No password to remember.</p>
+    <div class="field">
+      <label for="em">Email address</label>
+      <input id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" oninput="valEmail()">
+      <p class="hint">Used for login and match notifications only. Never shown on your profile.</p>
+    </div>
+  </section>
+
+  <!-- 2 · OTP -->
+  <section class="screen" data-step="2">
+    <h1>Enter the code</h1>
+    <p class="lede">Sent to <b id="emEcho">your email</b>. Check spam if it's not there in a minute.</p>
+    <div class="otp" id="otpWrap">
+      <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+      <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+    </div>
+    <p class="resend">Didn't get it? <b>Resend in 42s</b></p>
+  </section>
+
+  <!-- 3 · Claim -->
+  <section class="screen" data-step="3">
+    <h1>We found your profile</h1>
+    <p class="lede">Your family shared a biodata with the samaj. We've filled it in — check it's right.</p>
+    <div class="found">
+      <div class="found-top">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
+        <div>
+          <div class="n">Priya Shimpi</div>
+          <div class="m">26 · 5'4" · Pune</div>
+        </div>
+      </div>
+      <div class="found-rows">
+        <div class="frow"><div class="k">Education</div><div class="v">M.Com</div></div>
+        <div class="frow"><div class="k">Occupation</div><div class="v">Chartered Accountant</div></div>
+        <div class="frow"><div class="k">Native place</div><div class="v">Nashik</div></div>
+        <div class="frow"><div class="k">Family type</div><div class="v">Nuclear</div></div>
+        <div class="frow full"><div class="k">Father</div><div class="v">Retired bank manager</div></div>
+      </div>
+    </div>
+    <div class="source-note">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+      <div>This came from the biodata submitted to the Shimpi samaj. Nothing is public until you publish it yourself.</div>
+    </div>
+  </section>
+
+  <!-- 4 · Review -->
+  <section class="screen" data-step="4">
+    <h1>Check your details</h1>
+    <p class="lede">Fix anything that's off. These power the filters, so accuracy matters more than speed.</p>
+    <div class="row2">
+      <div class="field"><label>Age</label><input type="number" value="26" inputmode="numeric"></div>
+      <div class="field"><label>Height</label>
+        <select><option>5'2"</option><option selected>5'4"</option><option>5'6"</option><option>5'8"</option></select>
+      </div>
+    </div>
+    <div class="field"><label>City you live in</label>
+      <select><option selected>Pune</option><option>Chh. Sambhajinagar</option><option>Mumbai</option><option>Nashik</option><option>Jalna</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Highest education</label>
+      <select><option>B.Com</option><option selected>M.Com</option><option>MBA</option><option>B.Tech / M.Tech</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Occupation</label>
+      <select><option selected>Chartered Accountant</option><option>Engineer</option><option>Teacher</option><option>Doctor</option><option>Business</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Annual income</label>
+      <select><option>Below ₹5 L</option><option>₹5–8 L</option><option selected>₹8–12 L</option><option>₹12–18 L</option><option>₹18 L+</option><option>Prefer not to say</option></select>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Family type</label><select><option selected>Nuclear</option><option>Joint</option></select></div>
+      <div class="field"><label>Diet</label><select><option selected>Vegetarian</option><option>Non-vegetarian</option><option>Eggetarian</option></select></div>
+    </div>
+    <div class="field"><label>Horoscope matching</label>
+      <select><option>Important</option><option selected>Flexible</option><option>Not important</option></select>
+    </div>
+  </section>
+
+  <!-- 5 · Photos -->
+  <section class="screen" data-step="5">
+    <h1>Add your photos</h1>
+    <p class="lede">A clear face photo first. Profiles with three or more photos get roughly twice the interest.</p>
+    <div class="photogrid" id="pgrid"></div>
+    <p class="hint">Only signed-in members of Shimpi Jodi can see your photos. They're never public and never indexed by search engines.</p>
+  </section>
+
+  <!-- 6 · Prompts -->
+  <section class="screen" data-step="6">
+    <h1>Say something real</h1>
+    <p class="lede">Three short answers. This is what people actually remember — the rest is just data.</p>
+    <div id="promptList"></div>
+  </section>
+
+  <!-- 7 · Consent -->
+  <section class="screen" data-step="7">
+    <h1>Before you publish</h1>
+    <p class="lede">Your consent, in plain language. You can withdraw any of this later from Settings.</p>
+    <div class="consent-item" data-c="1" onclick="tc(this)">
+      <div class="cbox"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+      <div class="ctext"><div class="t">Publish my profile to Shimpi Jodi members</div>
+        <div class="s">Only signed-in, verified members of the community can see it. Required to continue.</div></div>
+    </div>
+    <div class="consent-item" data-c="1" onclick="tc(this)">
+      <div class="cbox"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+      <div class="ctext"><div class="t">Store my details, including community and family information</div>
+        <div class="s">As described in our <a href="#">Privacy Policy</a>. You can download or delete everything at any time. Required to continue.</div></div>
+    </div>
+    <div class="consent-item" data-c="0" onclick="tc(this)">
+      <div class="cbox"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+      <div class="ctext"><div class="t">Email me when someone expresses interest</div>
+        <div class="s">Optional. Turn off any time in Settings.</div></div>
+    </div>
+    <div class="consent-item" data-c="0" onclick="tc(this)">
+      <div class="cbox"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+      <div class="ctext"><div class="t">Let my family manage this profile with me</div>
+        <div class="s">Optional. Adds one more email that can view and edit. Common for matrimony profiles.</div></div>
+    </div>
+  </section>
+
+  <!-- 8 · Success -->
+  <section class="screen" data-step="8">
+    <div class="success">
+      <svg class="mark" viewBox="0 0 96 96">
+        <path class="valve-l" d="M48 80 C 20 73, 13 42, 27 20" stroke="#2C6E75" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path class="valve-r" d="M48 80 C 76 73, 83 42, 69 20" stroke="#1E3548" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle class="pearl" cx="48" cy="42" r="9" fill="#F4633A"/>
+      </svg>
+      <h1>You're live</h1>
+      <p>Your first five matches are ready. New ones arrive every morning at 8.</p>
+      <div class="meter">
+        <div class="mrow"><span>Profile strength</span><b id="pcNum">82%</b></div>
+        <div class="mbar"><i id="mfill"></i></div>
+        <p class="tip">Add two more photos and your hobbies to reach 100% — complete profiles appear higher in everyone's daily five.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer" id="footer">
+    <button class="btn btn-primary" id="cta" onclick="next()">Continue</button>
+  </div>
+</div>
+
+<script>
+const TOTAL=8;
+let step=0;
+const labels={1:'Continue',2:'Verify',3:'Yes, this is me',4:'Save & continue',5:'Continue',6:'Continue',7:'Publish my profile',8:'See my matches'};
+
+function go(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',+s.dataset.step===n));
+  step=n;
+  const tb=document.getElementById('topbar'),ft=document.getElementById('footer');
+  tb.classList.toggle('hidden', n===0 || n===8);
+  ft.style.display = n===0 ? 'none' : 'block';
+  document.getElementById('pbar').style.width = (n/TOTAL*100)+'%';
+  document.getElementById('stepno').textContent = n<8 ? `${n} of ${TOTAL-1}` : '';
+  document.getElementById('cta').textContent = labels[n]||'Continue';
+  window.scrollTo({top:0,behavior:'instant'});
+  if(n===2){const e=document.getElementById('em').value;document.getElementById('emEcho').textContent=e||'your email';setTimeout(()=>document.querySelector('#otpWrap input').focus(),320);}
+  if(n===8){setTimeout(()=>document.getElementById('mfill').style.width='82%',120);}
+  validate();
+}
+function next(){ step<8 ? go(step+1) : go(0); }
+document.getElementById('backBtn').onclick=()=>go(Math.max(0,step-1));
+
+/* email validation */
+function valEmail(){validate();}
+function validate(){
+  const cta=document.getElementById('cta');
+  if(step===1){
+    const v=document.getElementById('em').value;
+    cta.disabled=!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  } else if(step===2){
+    cta.disabled=[...document.querySelectorAll('#otpWrap input')].some(i=>!i.value);
+  } else if(step===7){
+    cta.disabled=[...document.querySelectorAll('.consent-item')].slice(0,2).some(el=>el.dataset.c!=='1');
+  } else cta.disabled=false;
+}
+
+/* OTP auto-advance */
+const otps=[...document.querySelectorAll('#otpWrap input')];
+otps.forEach((inp,i)=>{
+  inp.addEventListener('input',()=>{if(inp.value&&otps[i+1])otps[i+1].focus();validate();});
+  inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!inp.value&&otps[i-1])otps[i-1].focus();});
+});
+
+/* photos */
+const stock=['https://randomuser.me/api/portraits/women/44.jpg','https://randomuser.me/api/portraits/women/65.jpg','https://randomuser.me/api/portraits/women/90.jpg','https://randomuser.me/api/portraits/women/21.jpg'];
+let pics=[stock[0]];
+function renderPics(){
+  const g=document.getElementById('pgrid');
+  let h='';
+  for(let i=0;i<6;i++){
+    if(pics[i]) h+=`<div class="pslot filled"><img src="${pics[i]}" alt="">${i===0?'<span class="primary">Main</span>':''}<button class="x" onclick="rmPic(${i});event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`;
+    else h+=`<button class="pslot" onclick="addPic()"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg><span>Add</span></button>`;
+  }
+  g.innerHTML=h;
+}
+function addPic(){ if(pics.length<6){pics.push(stock[pics.length%stock.length]);renderPics();} }
+function rmPic(i){ pics.splice(i,1); renderPics(); }
+renderPics();
+
+/* prompts */
+const QS=["A Sunday at my home looks like…","In marriage, my one non-negotiable is…","My family teases me about…","Something I'm quietly proud of…","I'll know it's right when…","The way I unwind is…"];
+function renderPrompts(){
+  document.getElementById('promptList').innerHTML=[0,1,2].map(i=>`
+    <div class="pcard" id="pc${i}">
+      <div class="sel">
+        <span class="num">${i+1}</span>
+        <select onchange="markDone(${i})" id="ps${i}">
+          <option value="">Choose a prompt…</option>
+          ${QS.map(q=>`<option>${q}</option>`).join('')}
+        </select>
+      </div>
+      <textarea id="pt${i}" maxlength="140" placeholder="Keep it short and true." oninput="cc(${i});markDone(${i})"></textarea>
+      <div class="charcount" id="cc${i}">0 / 140</div>
+    </div>`).join('');
+}
+function cc(i){document.getElementById('cc'+i).textContent=document.getElementById('pt'+i).value.length+' / 140';}
+function markDone(i){
+  const ok=document.getElementById('ps'+i).value && document.getElementById('pt'+i).value.trim().length>3;
+  document.getElementById('pc'+i).classList.toggle('done',ok);
+}
+renderPrompts();
+
+/* consent */
+function tc(el){
+  el.dataset.c = el.dataset.c==='1' ? '0' : '1';
+  el.classList.toggle('on', el.dataset.c==='1');
+  validate();
+}
+document.querySelectorAll('.consent-item').forEach(el=>el.classList.toggle('on',el.dataset.c==='1'));
+
+go(0);
+</script>
+</body>
+</html>

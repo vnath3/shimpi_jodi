@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shimpi Jodi — The Golden Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1E3548;--indigo-70:#4A5F71;--teal:#2C6E75;--teal-tint:#E8F1F1;
+  --coral:#F4633A;--coral-tint:#FDEDE7;--cream:#FAF7F2;--surface:#FFF;
+  --ink:#141A1F;--muted:#7C868F;--line:#E7E3DC;--green:#3F7D5C;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',-apple-system,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;padding:32px 16px 80px;}
+.wrap{max-width:760px;margin:0 auto;}
+
+h1{font-family:'Baloo 2',sans-serif;font-size:25px;font-weight:700;color:var(--indigo);margin:0 0 4px;letter-spacing:-.4px;}
+.sub{font-size:13.5px;color:var(--muted);margin:0 0 22px;}
+
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;}
+.lg{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:999px;}
+.lg i{width:8px;height:8px;border-radius:50%;display:block;}
+.lg.admin{background:#EDEFF1;color:#5A646C;} .lg.admin i{background:#7C868F;}
+.lg.sys{background:var(--teal-tint);color:var(--teal);} .lg.sys i{background:var(--teal);}
+.lg.her{background:var(--coral-tint);color:#B8401C;} .lg.her i{background:var(--coral);}
+.lg.him{background:#E9EEF2;color:var(--indigo);} .lg.him i{background:var(--indigo);}
+
+.phase{margin-bottom:8px;}
+.phase-head{display:flex;align-items:center;gap:10px;margin:26px 0 12px;}
+.phase-head .n{width:26px;height:26px;border-radius:9px;background:var(--indigo);color:#fff;font-family:'Baloo 2';font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.phase-head h2{font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:700;color:var(--indigo);margin:0;}
+.phase-head .t{margin-left:auto;font-size:11.5px;color:var(--muted);font-weight:500;}
+
+.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:9px;position:relative;border-left:3px solid var(--line);}
+.step.admin{border-left-color:#7C868F;}
+.step.sys{border-left-color:var(--teal);}
+.step.her{border-left-color:var(--coral);}
+.step.him{border-left-color:var(--indigo);}
+.step .who{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.step.admin .who{color:#7C868F;} .step.sys .who{color:var(--teal);}
+.step.her .who{color:var(--coral);} .step.him .who{color:var(--indigo-70);}
+.step .what{font-size:14.5px;font-weight:500;line-height:1.45;}
+.step .why{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.5;}
+.step .db{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);background:var(--teal-tint);border-radius:6px;padding:3px 7px;display:inline-block;margin-top:8px;}
+
+.arrow{display:flex;justify-content:center;padding:1px 0 5px;}
+.arrow svg{width:14px;height:14px;stroke:#C9C3B9;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+
+.gate{background:var(--indigo);color:#fff;border-radius:14px;padding:15px 16px;margin-bottom:9px;display:flex;gap:12px;align-items:flex-start;}
+.gate svg{width:20px;height:20px;stroke:var(--coral);fill:none;stroke-width:2;flex-shrink:0;margin-top:1px;stroke-linecap:round;stroke-linejoin:round;}
+.gate .gt{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;}
+.gate .gs{font-size:12.5px;color:#B4C4CE;margin-top:3px;line-height:1.5;}
+
+.moment{background:linear-gradient(135deg,#FDEDE7,#FFF);border:1.5px solid var(--coral);border-radius:16px;padding:18px;margin-bottom:9px;text-align:center;}
+.moment svg{width:52px;height:52px;margin-bottom:8px;}
+.moment .mt{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:17px;color:var(--indigo);}
+.moment .ms{font-size:13px;color:#8F3417;margin-top:4px;line-height:1.5;}
+
+.final{background:var(--indigo);border-radius:18px;padding:26px 22px;text-align:center;margin-top:26px;}
+.final svg{width:58px;height:58px;margin-bottom:12px;}
+.final h3{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:700;color:#fff;margin:0 0 6px;}
+.final p{font-size:13.5px;color:#B4C4CE;margin:0;line-height:1.6;}
+
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
+@media(max-width:520px){.metrics{grid-template-columns:1fr;}}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:13px;}
+.metric .mk{font-size:11px;color:var(--muted);font-weight:500;}
+.metric .mv{font-family:'Baloo 2',sans-serif;font-size:19px;font-weight:700;color:var(--indigo);margin-top:2px;}
+.metric .md{font-size:11px;color:var(--teal);margin-top:1px;}
+
+.note{background:var(--teal-tint);border-radius:13px;padding:13px 15px;font-size:12.5px;color:#2A5459;line-height:1.6;display:flex;gap:10px;margin-top:22px;}
+.note svg{width:16px;height:16px;stroke:var(--teal);fill:none;stroke-width:1.9;flex-shrink:0;margin-top:2px;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>The Golden Path</h1>
+  <p class="sub">One successful journey — from a PDF on an admin's desk to two families talking</p>
+
+  <div class="legend">
+    <span class="lg admin"><i></i>Region admin</span>
+    <span class="lg sys"><i></i>System</span>
+    <span class="lg her"><i></i>Member A (Priya)</span>
+    <span class="lg him"><i></i>Member B (Rahul)</span>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase">
+    <div class="phase-head"><span class="n">1</span><h2>Getting the profile in</h2><span class="t">admin side</span></div>
+
+    <div class="step admin">
+      <div class="who">Region admin · Marathwada</div>
+      <div class="what">Uploads a batch of 12 biodata PDFs collected from the samaj</div>
+      <div class="why">Scoped to their region only — they can't see or touch other regions' data</div>
+      <div class="db">import_batches</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step sys">
+      <div class="who">System · extraction worker</div>
+      <div class="what">Reads each PDF, maps it to the profile schema, scores confidence per field</div>
+      <div class="why">Runs off the main app. If it fails, nothing user-facing breaks</div>
+      <div class="db">extracted_drafts · confidence jsonb</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step admin">
+      <div class="who">Region admin</div>
+      <div class="what">Reviews the queue — checks only the amber-flagged fields against the PDF, fixes two, approves</div>
+      <div class="why">~40 seconds per profile instead of re-typing everything</div>
+      <div class="db">status → approved</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="gate">
+      <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      <div><div class="gt">Consent gate</div>
+      <div class="gs">Approval only sends a claim link. The profile stays unlisted and invisible until Priya publishes it herself. The admin never publishes on her behalf.</div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase">
+    <div class="phase-head"><span class="n">2</span><h2>She claims and publishes</h2><span class="t">~90 seconds</span></div>
+
+    <div class="step her">
+      <div class="who">Priya</div>
+      <div class="what">Opens the claim link on her phone, enters her email, gets a 6-digit code</div>
+      <div class="db">auth_otps</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step her">
+      <div class="who">Priya</div>
+      <div class="what">Sees her details already filled in — corrects her height, confirms the rest</div>
+      <div class="why">Every field is a dropdown, so filters stay clean</div>
+      <div class="db">profiles · profile_family</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step her">
+      <div class="who">Priya</div>
+      <div class="what">Adds 4 photos and a 40-second video introduction; answers 3 prompts</div>
+      <div class="why">Video is capped at 60s and transcoded to an HLS ladder in the background</div>
+      <div class="db">media_assets → media_variants</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step her">
+      <div class="who">Priya</div>
+      <div class="what">Sets location: lives in Pune, works in Pune, hometown Nashik — open to move, prefers Pune or Nashik</div>
+      <div class="why">Four separate facts, because "where she is" and "where she'll settle" are different questions</div>
+      <div class="db">profile_location_prefs</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step her">
+      <div class="who">Priya</div>
+      <div class="what">Ticks the two required consents, publishes. Profile strength: 92%</div>
+      <div class="db">consents (append-only) · status → published</div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase">
+    <div class="phase-head"><span class="n">3</span><h2>He finds her</h2><span class="t">next morning</span></div>
+
+    <div class="step sys">
+      <div class="who">System · 8:00 AM</div>
+      <div class="what">Builds Rahul's Daily Five from the candidate pool</div>
+      <div class="why">Same community, opposite gender, not blocked, no prior interest — enforced in one function so the rules can't drift</div>
+      <div class="db">candidates_for(profile_id)</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step him">
+      <div class="who">Rahul</div>
+      <div class="what">Sees Priya's card — photo, three facts, one prompt answer, and honest compatibility chips</div>
+      <div class="why">Blurhash paints instantly; the 720px card image streams in behind it</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step him">
+      <div class="who">Rahul</div>
+      <div class="what">Opens the full profile, watches her video intro, reads the family section</div>
+      <div class="db">profile_views (partitioned)</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step him">
+      <div class="who">Rahul</div>
+      <div class="what">Sends interest, tagged <b>"Our families seem aligned"</b></div>
+      <div class="why">DB trigger verifies same community + opposite gender before the row is written</div>
+      <div class="db">interests · status pending</div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase">
+    <div class="phase-head"><span class="n">4</span><h2>She says yes</h2><span class="t">same evening</span></div>
+
+    <div class="step her">
+      <div class="who">Priya</div>
+      <div class="what">Sees the interest with its intent tag, opens his profile, accepts</div>
+      <div class="why">Had she declined, he'd never be told — silent decline matters in a small community</div>
+      <div class="db">status → accepted · conversations created (locked)</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="moment">
+      <svg viewBox="0 0 96 96">
+        <path d="M48 80 C 20 73, 13 42, 27 20" stroke="#2C6E75" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M48 80 C 76 73, 83 42, 69 20" stroke="#1E3548" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle cx="48" cy="42" r="9" fill="#F4633A"/>
+      </svg>
+      <div class="mt">The shell opens. The pearl appears.</div>
+      <div class="ms">Both sides see it. This is the app's emotional peak — and the only place the logo animates.</div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase">
+    <div class="phase-head"><span class="n">5</span><h2>The conversation opens</h2><span class="t">the paywall</span></div>
+
+    <div class="gate">
+      <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      <div><div class="gt">Paywall — placed after the yes, never before</div>
+      <div class="gs">Browsing and expressing interest stay free forever. You charge at the moment of proven value, not to unlock the front door.</div></div>
+    </div>
+
+    <div class="step him">
+      <div class="who">Rahul</div>
+      <div class="what">Picks the 6-month plan, pays ₹799 by UPI</div>
+      <div class="why">One-time payment, no auto-renewal, no card stored — stated on the screen</div>
+      <div class="db">payments → subscriptions</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step sys">
+      <div class="who">System</div>
+      <div class="what">Unlocks the conversation for <b>both</b> of them</div>
+      <div class="why">Priya doesn't have to pay too — one payment opens one conversation for both sides</div>
+      <div class="db">conversations · status → open</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step him">
+      <div class="who">Rahul → Priya</div>
+      <div class="what">First messages exchanged, with the safety banner at the top of the thread</div>
+      <div class="db">messages</div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+
+    <div class="step her">
+      <div class="who">Priya</div>
+      <div class="what">"Saturday evening is easier for my parents." Families arrange to speak.</div>
+      <div class="why">The app's job is done here — it hands off to the families, it doesn't try to replace them</div>
+    </div>
+  </div>
+
+  <div class="final">
+    <svg viewBox="0 0 96 96">
+      <path d="M48 80 C 20 73, 13 42, 27 20" stroke="#5FA8AE" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M48 80 C 76 73, 83 42, 69 20" stroke="#FAF7F2" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <circle cx="48" cy="42" r="9" fill="#F4633A"/>
+    </svg>
+    <h3>Both profiles set to hidden</h3>
+    <p>Two months later they mark themselves "found a match" — the one metric that actually measures whether this worked.</p>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="mk">Admin effort per profile</div><div class="mv">~40 sec</div><div class="md">review-only, not data entry</div></div>
+    <div class="metric"><div class="mk">Member time to publish</div><div class="mv">~90 sec</div><div class="md">everything pre-filled</div></div>
+    <div class="metric"><div class="mk">Money changes hands</div><div class="mv">Once</div><div class="md">after a mutual yes</div></div>
+  </div>
+
+  <div class="note">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+    <div>Every gate in this flow is enforced at the database, not just in the UI — community isolation, the opposite-gender rule, and the consent requirement are triggers and policies. A bug in the app layer cannot bypass them.</div>
+  </div>
+</div>
+</body>
+</html>

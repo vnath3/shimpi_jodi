@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Shimpi Jodi — Interests &amp; Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1E3548;--indigo-70:#4A5F71;--teal:#2C6E75;--teal-tint:#E8F1F1;
+  --coral:#F4633A;--coral-tint:#FDEDE7;--cream:#FAF7F2;--surface:#FFF;
+  --ink:#141A1F;--muted:#7C868F;--line:#E7E3DC;--radius:18px;
+  --shadow:0 2px 10px rgba(30,53,72,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Inter',-apple-system,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;}
+img{display:block;}
+.app{max-width:440px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden;}
+
+.header{position:sticky;top:0;z-index:40;background:rgba(250,247,242,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+.hrow{padding:13px 16px 11px;display:flex;align-items:center;justify-content:space-between;}
+.hrow h1{font-family:'Baloo 2',sans-serif;font-size:21px;font-weight:700;color:var(--indigo);margin:0;letter-spacing:-.3px;}
+.plusbtn{display:flex;align-items:center;gap:6px;background:var(--indigo);color:#fff;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:600;font-family:'Baloo 2',sans-serif;}
+.plusbtn svg{width:13px;height:13px;fill:#F4633A;stroke:none;}
+
+.tabs{display:flex;gap:4px;padding:0 12px 10px;}
+.tab{flex:1;padding:8px 4px;border-radius:11px;font-size:13.5px;font-weight:600;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:5px;transition:all .16s;}
+.tab.on{background:var(--indigo);color:#fff;}
+.tab .cnt{background:var(--coral);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;padding:0 4px;border-radius:999px;display:flex;align-items:center;justify-content:center;}
+.tab.on .cnt{background:var(--coral);}
+
+.pane{display:none;padding:16px 16px 104px;}
+.pane.on{display:block;animation:fade .26s ease both;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* interest row */
+.irow{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:12px;}
+.itop{display:flex;gap:13px;}
+.itop img{width:64px;height:64px;border-radius:16px;object-fit:cover;flex-shrink:0;background:#DDD8D0;}
+.imeta{flex:1;min-width:0;}
+.iname{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16.5px;color:var(--indigo);display:flex;align-items:center;gap:6px;}
+.iname svg{width:14px;height:14px;flex-shrink:0;}
+.isub{font-size:12.5px;color:var(--muted);margin-top:1px;}
+.iwhen{font-size:11.5px;color:#A8AFB5;margin-top:5px;}
+.intent{margin-top:11px;background:var(--coral-tint);border-radius:12px;padding:10px 12px;font-size:13px;color:#8F3417;display:flex;gap:8px;align-items:flex-start;line-height:1.45;}
+.intent svg{width:14px;height:14px;stroke:var(--coral);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px;stroke-linecap:round;stroke-linejoin:round;}
+.iacts{display:flex;gap:9px;margin-top:12px;}
+.btn{border-radius:12px;padding:11px;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s;flex:1;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--coral);color:#fff;}
+.btn-outline{border:1.5px solid var(--line);color:var(--indigo-70);}
+.btn-dark{background:var(--indigo);color:#fff;}
+.btn svg{width:15px;height:15px;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.btn-primary svg{stroke:#fff;}
+.btn-outline svg{stroke:var(--indigo-70);}
+.btn-dark svg{stroke:#fff;}
+
+/* status pill */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;margin-top:8px;}
+.pill.wait{background:#F2F3F4;color:#6B747C;}
+.pill.yes{background:var(--teal-tint);color:var(--teal);}
+.pill.no{background:#F6EFEF;color:#96706B;}
+.pill svg{width:11px;height:11px;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;}
+.pill.wait svg{stroke:#8B939A;}.pill.yes svg{stroke:var(--teal);}.pill.no svg{stroke:#B08C86;}
+
+/* chat list */
+.crow{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;margin-bottom:11px;box-shadow:var(--shadow);position:relative;}
+.crow img{width:52px;height:52px;border-radius:15px;object-fit:cover;background:#DDD8D0;flex-shrink:0;}
+.crow.locked img{filter:grayscale(.6) blur(1px);opacity:.75;}
+.cbody{flex:1;min-width:0;}
+.cname{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15.5px;color:var(--indigo);}
+.cmsg{font-size:13px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.crow.locked .cmsg{filter:blur(3.5px);user-select:none;}
+.ctime{font-size:11px;color:#A8AFB5;flex-shrink:0;align-self:flex-start;margin-top:3px;}
+.lockchip{position:absolute;right:13px;bottom:12px;display:flex;align-items:center;gap:5px;background:var(--indigo);color:#fff;font-size:11px;font-weight:600;padding:5px 10px;border-radius:999px;}
+.lockchip svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.unread{width:9px;height:9px;border-radius:50%;background:var(--coral);flex-shrink:0;}
+
+.section-label{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:4px 2px 10px;}
+
+/* empty */
+.empty{text-align:center;padding:44px 30px;}
+.empty svg{width:52px;height:52px;margin-bottom:12px;}
+.empty h3{font-family:'Baloo 2',sans-serif;font-size:17px;color:var(--indigo);margin:0 0 5px;}
+.empty p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.6;}
+
+/* bottom nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom));}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;position:relative;}
+.nav-item svg{width:22px;height:22px;stroke:var(--muted);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.nav-item span{font-size:10px;color:var(--muted);font-weight:500;}
+.nav-item.active svg{stroke:var(--indigo);}
+.nav-item.active span{color:var(--indigo);font-weight:600;}
+.nav-item.active::before{content:'';position:absolute;top:-8px;width:5px;height:5px;border-radius:50%;background:var(--coral);}
+.nav-badge{position:absolute;top:2px;right:calc(50% - 18px);min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--coral);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* backdrop + sheets */
+.backdrop{position:fixed;inset:0;z-index:60;background:rgba(15,22,28,.45);opacity:0;pointer-events:none;transition:opacity .25s;}
+.backdrop.open{opacity:1;pointer-events:auto;}
+.sheet{position:fixed;bottom:0;left:50%;transform:translate(-50%,100%);width:100%;max-width:440px;max-height:90vh;z-index:70;background:var(--cream);border-radius:22px 22px 0 0;overflow-y:auto;overscroll-behavior:contain;transition:transform .34s cubic-bezier(.32,.72,0,1);}
+.sheet.open{transform:translate(-50%,0);}
+.shandle{position:sticky;top:0;background:var(--cream);padding:10px 0 4px;display:flex;justify-content:center;z-index:3;}
+.shandle div{width:38px;height:4px;border-radius:999px;background:#D4CFC6;}
+
+/* paywall */
+.pay{padding:6px 20px calc(20px + env(safe-area-inset-bottom));}
+.pay .mark{width:58px;height:58px;margin:6px auto 14px;display:block;}
+.pay h2{font-family:'Baloo 2',sans-serif;font-size:23px;font-weight:700;color:var(--indigo);text-align:center;margin:0 0 6px;letter-spacing:-.3px;}
+.pay .lede{font-size:14px;color:var(--muted);text-align:center;margin:0 0 20px;line-height:1.55;}
+.cmp{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:18px;}
+.cmp-head{display:grid;grid-template-columns:1fr 74px 74px;background:var(--cream);border-bottom:1px solid var(--line);padding:11px 14px;font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.cmp-head span:not(:first-child){text-align:center;}
+.cmp-head .plus{color:var(--coral);}
+.cmp-row{display:grid;grid-template-columns:1fr 74px 74px;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center;font-size:13.5px;}
+.cmp-row:last-child{border-bottom:none;}
+.cmp-row span:not(:first-child){text-align:center;}
+.cmp-row svg{width:16px;height:16px;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle;}
+.yes svg{stroke:var(--teal);} .no svg{stroke:#C9CDD1;}
+
+.plan{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:15px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .18s;position:relative;}
+.plan.on{border-color:var(--coral);}
+.plan .pl{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15.5px;color:var(--indigo);}
+.plan .ps{font-size:12px;color:var(--muted);margin-top:2px;}
+.plan .pr{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:18px;color:var(--indigo);text-align:right;flex-shrink:0;}
+.plan .pm{font-size:11px;color:var(--muted);font-weight:400;font-family:'Inter';}
+.plan .best{position:absolute;top:-9px;left:14px;background:var(--coral);color:#fff;font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em;}
+.paynote{font-size:11.5px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.55;}
+
+/* match moment */
+.confirm{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:28px;opacity:0;pointer-events:none;transition:opacity .22s;background:rgba(15,22,28,.58);backdrop-filter:blur(3px);}
+.confirm.open{opacity:1;pointer-events:auto;}
+.cbox2{background:var(--surface);border-radius:24px;padding:30px 24px 20px;text-align:center;max-width:325px;width:100%;transform:scale(.94);transition:transform .28s cubic-bezier(.34,1.4,.5,1);}
+.confirm.open .cbox2{transform:scale(1);}
+.cbox2 .shellwrap{width:78px;height:78px;margin:0 auto 14px;}
+.cbox2 h3{font-family:'Baloo 2',sans-serif;font-size:21px;font-weight:700;color:var(--indigo);margin:0 0 6px;}
+.cbox2 p{font-size:13.5px;color:var(--muted);margin:0 0 18px;line-height:1.55;}
+.cbox2 .btn{width:100%;margin-bottom:8px;}
+.valve-l,.valve-r{transform-origin:48px 80px;}
+.confirm.open .valve-l{animation:openL .5s cubic-bezier(.4,1.2,.5,1) both;}
+.confirm.open .valve-r{animation:openR .5s cubic-bezier(.4,1.2,.5,1) both;}
+.confirm.open .pearl-pop{animation:pearlIn .5s .18s cubic-bezier(.34,1.5,.5,1) both;}
+@keyframes openL{from{transform:rotate(17deg);}to{transform:rotate(0);}}
+@keyframes openR{from{transform:rotate(-17deg);}to{transform:rotate(0);}}
+@keyframes pearlIn{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+/* chat thread */
+.thread{position:fixed;inset:0;z-index:80;background:var(--cream);max-width:440px;margin:0 auto;display:none;flex-direction:column;}
+.thread.open{display:flex;}
+.thead{background:rgba(250,247,242,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:11px 14px;display:flex;align-items:center;gap:11px;flex-shrink:0;}
+.thead .back{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:11px;}
+.thead .back svg{width:19px;height:19px;stroke:var(--indigo);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.thead img{width:38px;height:38px;border-radius:12px;object-fit:cover;}
+.thead .tn{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15.5px;color:var(--indigo);}
+.thead .ts{font-size:11.5px;color:var(--teal);}
+.tbody{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column;gap:9px;}
+.daychip{align-self:center;background:var(--line);color:var(--muted);font-size:11px;font-weight:600;padding:4px 11px;border-radius:999px;margin-bottom:4px;}
+.msg{max-width:76%;padding:10px 13px;border-radius:16px;font-size:14.5px;line-height:1.45;}
+.msg.them{background:var(--surface);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:6px;}
+.msg.me{background:var(--indigo);color:#fff;align-self:flex-end;border-bottom-right-radius:6px;}
+.msgtime{font-size:10.5px;color:#A8AFB5;margin-top:2px;}
+.msg.me + .msgtime{align-self:flex-end;}
+.safety{background:var(--teal-tint);border-radius:13px;padding:11px 13px;font-size:12px;color:#2A5459;line-height:1.55;display:flex;gap:9px;margin-bottom:6px;}
+.safety svg{width:15px;height:15px;stroke:var(--teal);fill:none;stroke-width:1.9;flex-shrink:0;margin-top:1px;stroke-linecap:round;stroke-linejoin:round;}
+.tinput{border-top:1px solid var(--line);background:var(--surface);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:9px;align-items:center;flex-shrink:0;}
+.tinput input{flex:1;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font-size:15px;outline:none;font-family:inherit;}
+.tinput input:focus{border-color:var(--teal);}
+.sendbtn{width:42px;height:42px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sendbtn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+
+.toast{position:fixed;bottom:96px;left:50%;transform:translate(-50%,20px);background:var(--indigo);color:#fff;padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:500;z-index:95;opacity:0;pointer-events:none;transition:all .25s;display:flex;align-items:center;gap:8px;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+.toast .pearl{width:8px;height:8px;border-radius:50%;background:var(--coral);}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div class="hrow">
+      <h1 id="pageTitle">Interests</h1>
+      <button class="plusbtn" onclick="openPay()">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg> Get Plus
+      </button>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-p="recv">Received <span class="cnt">3</span></button>
+      <button class="tab" data-p="sent">Sent</button>
+      <button class="tab" data-p="short">Shortlist</button>
+    </div>
+  </header>
+
+  <div class="pane on" id="p-recv"></div>
+  <div class="pane" id="p-sent"></div>
+  <div class="pane" id="p-short"></div>
+  <div class="pane" id="p-chat"></div>
+
+  <nav class="nav">
+    <button class="nav-item" onclick="toast('Discover — built in Phase 1')"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg><span>Discover</span></button>
+    <button class="nav-item active" id="navInt" onclick="showInterests()"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.8 5 6.2 5c1.9 0 3.3 1 4 2.3.7-1.3 2.1-2.3 4-2.3 3.4 0 5.5 3.4 3.7 7-2.5 4.4-9.5 9-9.5 9z"/></svg><span>Interests</span><span class="nav-badge" id="intBadge">3</span></button>
+    <button class="nav-item" id="navChat" onclick="showChat()"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/></svg><span>Chat</span></button>
+    <button class="nav-item" onclick="toast('Profile — coming in Phase 5')"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="10" r="3"/><path d="M7 18.5c1-3 3-4.2 5-4.2s4 1.2 5 4.2"/></svg><span>Profile</span></button>
+  </nav>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+
+<!-- paywall -->
+<div class="sheet" id="paySheet">
+  <div class="shandle"><div></div></div>
+  <div class="pay">
+    <svg class="mark" viewBox="0 0 96 96">
+      <path d="M48 80 C 20 73, 13 42, 27 20" stroke="#2C6E75" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M48 80 C 76 73, 83 42, 69 20" stroke="#1E3548" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <circle cx="48" cy="42" r="9" fill="#F4633A"/>
+    </svg>
+    <h2 id="payTitle">Open the conversation</h2>
+    <p class="lede" id="payLede">You and Anjali have both said yes. Plus lets you talk.</p>
+
+    <div class="cmp">
+      <div class="cmp-head"><span>What you get</span><span>Free</span><span class="plus">Plus</span></div>
+      <div class="cmp-row"><span>Browse daily matches</span><span class="yes"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span><span class="yes"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+      <div class="cmp-row"><span>Express interest</span><span class="yes"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span><span class="yes"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+      <div class="cmp-row"><span>Chat after a mutual yes</span><span class="no"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="yes"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+      <div class="cmp-row"><span>See who viewed you</span><span class="no"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="yes"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+      <div class="cmp-row"><span>Contact details after both agree</span><span class="no"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="yes"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></span></div>
+    </div>
+
+    <div class="plan" data-plan="3" onclick="pickPlan(this)">
+      <div><div class="pl">3 months</div><div class="ps">₹166 per month</div></div>
+      <div class="pr">₹499</div>
+    </div>
+    <div class="plan on" data-plan="6" onclick="pickPlan(this)">
+      <span class="best">Most chosen</span>
+      <div><div class="pl">6 months</div><div class="ps">₹133 per month</div></div>
+      <div class="pr">₹799</div>
+    </div>
+    <div class="plan" data-plan="12" onclick="pickPlan(this)">
+      <div><div class="pl">12 months</div><div class="ps">₹104 per month</div></div>
+      <div class="pr">₹1,249</div>
+    </div>
+
+    <button class="btn btn-primary" style="margin-top:14px" onclick="subscribe()">Continue to payment</button>
+    <p class="paynote">One-time payment. No auto-renewal, no card stored.<br>UPI, card, and net banking accepted.</p>
+  </div>
+</div>
+
+<!-- match moment -->
+<div class="confirm" id="confirm">
+  <div class="cbox2">
+    <div class="shellwrap">
+      <svg viewBox="0 0 96 96">
+        <path class="valve-l" d="M48 80 C 20 73, 13 42, 27 20" stroke="#2C6E75" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path class="valve-r" d="M48 80 C 76 73, 83 42, 69 20" stroke="#1E3548" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle class="pearl-pop" cx="48" cy="42" r="9" fill="#F4633A"/>
+      </svg>
+    </div>
+    <h3 id="mTitle">It's a yes from both sides</h3>
+    <p id="mText"></p>
+    <button class="btn btn-primary" id="mPrimary">Open chat</button>
+    <button class="btn btn-outline" onclick="closeConfirm()">Later</button>
+  </div>
+</div>
+
+<!-- chat thread -->
+<div class="thread" id="thread">
+  <div class="thead">
+    <button class="back" onclick="closeThread()"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <img id="tImg" src="" alt="">
+    <div><div class="tn" id="tName"></div><div class="ts">Chat open · both accepted</div></div>
+  </div>
+  <div class="tbody" id="tBody"></div>
+  <div class="tinput">
+    <input id="tInput" placeholder="Write a message…" onkeydown="if(event.key==='Enter')sendMsg()">
+    <button class="sendbtn" onclick="sendMsg()"><svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 8 6 8z"/></svg></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="pearl"></span><span id="toastText"></span></div>
+
+<script>
+const P=n=>`https://randomuser.me/api/portraits/women/${n}.jpg`;
+const M=n=>`https://randomuser.me/api/portraits/men/${n}.jpg`;
+
+let plus=false;
+
+const received=[
+ {id:1,name:'Anjali Shimpi',img:P(68),sub:"24 · 5'2\" · Architect · Ch. Sambhajinagar",when:'2 hours ago',intent:'Our families seem aligned',status:null},
+ {id:2,name:'Sneha Shimpi',img:P(52),sub:"27 · 5'5\" · Marketing Manager · Nashik",when:'Yesterday',intent:'Impressed by your profile',status:null},
+ {id:3,name:'Rutuja Shimpi',img:P(26),sub:"25 · 5'3\" · Teacher · Jalna",when:'3 days ago',intent:'Would like to talk',status:null}
+];
+const sentList=[
+ {id:11,name:'Priya Shimpi',img:P(44),sub:"26 · 5'4\" · CA · Pune",when:'Sent 1 day ago',state:'yes'},
+ {id:12,name:'Manasi Shimpi',img:P(9),sub:"28 · 5'6\" · Engineer · Mumbai",when:'Sent 2 days ago',state:'wait'},
+ {id:13,name:'Kirti Shimpi',img:P(33),sub:"25 · 5'3\" · Designer · Pune",when:'Sent 5 days ago',state:'no'}
+];
+const shortlist=[
+ {id:21,name:'Manasi Shimpi',img:P(9),sub:"28 · 5'6\" · Engineer · Mumbai",when:'Saved 3 days ago'},
+ {id:22,name:'Sneha Shimpi',img:P(52),sub:"27 · 5'5\" · Marketing Manager · Nashik",when:'Saved last week'}
+];
+let chats=[
+ {id:11,name:'Priya Shimpi',img:P(44),last:'That works — Saturday evening is easier for my parents.',time:'11:04',unread:true,open:true,
+  msgs:[{t:'Hi Vivek — thank you for reaching out. My family has seen your profile too.',me:0,tm:'10:41'},
+        {t:'Thank you Priya. Would it be alright if our families spoke this week?',me:1,tm:'10:52'},
+        {t:'That works — Saturday evening is easier for my parents.',me:0,tm:'11:04'}]},
+ {id:12,name:'Anjali Shimpi',img:P(68),last:'Namaskar! Ours is a joint family from Jalna…',time:'Yesterday',unread:false,open:false,msgs:[]},
+ {id:13,name:'Sneha Shimpi',img:P(52),last:'Thanks for accepting — I saw you also like trekking',time:'2d',unread:false,open:false,msgs:[]}
+];
+
+const ic={
+ verified:'<svg viewBox="0 0 24 24"><path d="M12 2l2.6 1.9 3.2-.3 1 3.1 2.6 1.9-1.3 3 1.3 3-2.6 1.9-1 3.1-3.2-.3L12 22l-2.6-1.9-3.2.3-1-3.1L2.6 15.4l1.3-3-1.3-3 2.6-1.9 1-3.1 3.2.3L12 2z" fill="#F4633A"/><path d="M8.6 12.2l2.3 2.3 4.5-4.7" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+ spark:'<svg viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>',
+ check:'<svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>',
+ x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+ clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>',
+ lock:'<svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>',
+ chat:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/></svg>',
+ shield:'<svg viewBox="0 0 24 24"><path d="M12 3l7 3.5v5c0 4.8-3 8-7 9.5-4-1.5-7-4.7-7-9.5v-5L12 3z"/></svg>',
+ bookmark:'<svg viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg>'
+};
+
+/* ---------- render ---------- */
+function recvHTML(r){
+ if(r.status==='declined') return '';
+ return `<div class="irow">
+  <div class="itop">
+    <img src="${r.img}" alt="">
+    <div class="imeta">
+      <div class="iname">${r.name.split(' ')[0]} ${ic.verified}</div>
+      <div class="isub">${r.sub}</div>
+      <div class="iwhen">${r.when}</div>
+    </div>
+  </div>
+  <div class="intent">${ic.spark}<div>${r.intent}</div></div>
+  ${r.status==='accepted'
+    ? `<div class="iacts"><button class="btn btn-dark" onclick="openChatFor(${r.id},'${r.name}','${r.img}')">${ic.chat} Open chat</button></div>`
+    : `<div class="iacts">
+        <button class="btn btn-outline" onclick="decline(${r.id})">${ic.x} Not a match</button>
+        <button class="btn btn-primary" onclick="accept(${r.id})">${ic.check} Accept</button>
+       </div>`}
+ </div>`;
+}
+function sentHTML(s){
+ const map={wait:['wait',ic.clock,'Waiting for a reply'],yes:['yes',ic.check,'Accepted — chat open'],no:['no',ic.x,'Not taken forward']};
+ const [cls,icon,txt]=map[s.state];
+ return `<div class="irow"><div class="itop">
+   <img src="${s.img}" alt="">
+   <div class="imeta">
+     <div class="iname">${s.name.split(' ')[0]}</div>
+     <div class="isub">${s.sub}</div>
+     <div class="iwhen">${s.when}</div>
+     <span class="pill ${cls}">${icon}${txt}</span>
+   </div></div></div>`;
+}
+function shortHTML(s){
+ return `<div class="irow"><div class="itop">
+   <img src="${s.img}" alt="">
+   <div class="imeta">
+     <div class="iname">${s.name.split(' ')[0]}</div>
+     <div class="isub">${s.sub}</div>
+     <div class="iwhen">${s.when}</div>
+   </div></div>
+   <div class="iacts">
+     <button class="btn btn-outline" onclick="toast('Removed from shortlist')">${ic.bookmark} Remove</button>
+     <button class="btn btn-primary" onclick="toast('Interest sent')">Express interest</button>
+   </div></div>`;
+}
+function chatHTML(c){
+ const locked = c.open && !plus;
+ return `<div class="crow ${locked?'locked':''}" onclick="${c.open?(plus?`openChatFor(${c.id},'${c.name}','${c.img}')`:`openPay('${c.name.split(' ')[0]}')`):`toast('Waiting for her to accept')`}">
+   <img src="${c.img}" alt="">
+   <div class="cbody">
+     <div class="cname">${c.name.split(' ')[0]}</div>
+     <div class="cmsg">${c.last}</div>
+   </div>
+   ${c.unread&&plus?'<span class="unread"></span>':''}
+   <span class="ctime">${c.time}</span>
+   ${locked?`<span class="lockchip">${ic.lock} Unlock</span>`:''}
+ </div>`;
+}
+
+function render(){
+ const rec=received.filter(r=>r.status!=='declined');
+ document.getElementById('p-recv').innerHTML = rec.length
+   ? rec.map(recvHTML).join('')
+   : `<div class="empty">${bigShell()}<h3>No new interests</h3><p>When someone expresses interest, it lands here first.</p></div>`;
+ document.getElementById('p-sent').innerHTML = sentList.map(sentHTML).join('');
+ document.getElementById('p-short').innerHTML = shortlist.length
+   ? shortlist.map(shortHTML).join('')
+   : `<div class="empty">${bigShell()}<h3>Nothing saved yet</h3><p>Tap the bookmark on any profile to keep it here.</p></div>`;
+
+ const openChats=chats.filter(c=>c.open), pend=chats.filter(c=>!c.open);
+ document.getElementById('p-chat').innerHTML =
+   (openChats.length?`<div class="section-label">Open conversations</div>`+openChats.map(chatHTML).join(''):'')+
+   (pend.length?`<div class="section-label" style="margin-top:18px">Waiting on them</div>`+pend.map(chatHTML).join(''):'');
+
+ const n=rec.filter(r=>!r.status).length;
+ const b=document.getElementById('intBadge');
+ b.style.display=n?'flex':'none';b.textContent=n;
+ const t=document.querySelector('.tab[data-p="recv"] .cnt');
+ if(t){t.style.display=n?'flex':'none';t.textContent=n;}
+}
+function bigShell(){return `<svg viewBox="0 0 96 96"><path d="M48 78 C 26 72, 20 48, 30 30" stroke="#C9C3B9" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M48 78 C 70 72, 76 48, 66 30" stroke="#C9C3B9" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;}
+
+/* ---------- actions ---------- */
+function accept(id){
+ const r=received.find(x=>x.id===id);r.status='accepted';
+ if(!chats.find(c=>c.id===id)) chats.unshift({id,name:r.name,img:r.img,last:'Say the first hello',time:'now',unread:false,open:true,msgs:[]});
+ render();
+ document.getElementById('mText').textContent = `You and ${r.name.split(' ')[0]} have both said yes. ${plus?'Chat is open.':'Plus opens the conversation for both of you.'}`;
+ document.getElementById('mPrimary').textContent = plus?'Open chat':'See Plus';
+ document.getElementById('mPrimary').onclick = ()=>{ closeConfirm(); plus?openChatFor(id,r.name,r.img):openPay(r.name.split(' ')[0]); };
+ document.getElementById('confirm').classList.add('open');
+}
+function decline(id){ received.find(x=>x.id===id).status='declined'; render(); toast('Declined — she won\'t be notified'); }
+function closeConfirm(){document.getElementById('confirm').classList.remove('open');}
+
+/* paywall */
+function openPay(who){
+ if(who){document.getElementById('payLede').textContent=`You and ${who} have both said yes. Plus lets you talk.`;}
+ document.getElementById('paySheet').classList.add('open');
+ document.getElementById('backdrop').classList.add('open');
+ document.body.style.overflow='hidden';
+}
+function closeAll(){
+ document.getElementById('paySheet').classList.remove('open');
+ document.getElementById('backdrop').classList.remove('open');
+ document.body.style.overflow='';
+}
+document.getElementById('backdrop').onclick=closeAll;
+function pickPlan(el){document.querySelectorAll('.plan').forEach(p=>p.classList.remove('on'));el.classList.add('on');}
+function subscribe(){ plus=true; closeAll(); render(); toast('Plus active — chats unlocked'); }
+
+/* chat */
+let current=null;
+function openChatFor(id,name,img){
+ if(!plus){ openPay(name.split(' ')[0]); return; }
+ current=chats.find(c=>c.id===id)||{id,name,img,msgs:[]};
+ current.unread=false;
+ document.getElementById('tImg').src=img;
+ document.getElementById('tName').textContent=name.split(' ')[0];
+ renderThread();
+ document.getElementById('thread').classList.add('open');
+ document.body.style.overflow='hidden';
+ render();
+}
+function renderThread(){
+ const b=document.getElementById('tBody');
+ b.innerHTML=`<div class="safety">${ic.shield}<div>Keep the conversation here until you're comfortable. Never send money. Report anything that feels off — we act on every report.</div></div>`
+  + `<div class="daychip">Today</div>`
+  + (current.msgs.length
+      ? current.msgs.map(m=>`<div class="msg ${m.me?'me':'them'}">${m.t}</div><div class="msgtime" style="${m.me?'align-self:flex-end':''}">${m.tm}</div>`).join('')
+      : `<div class="msg them">Say hello — you both accepted, so she's expecting you.</div>`);
+ b.scrollTop=b.scrollHeight;
+}
+function sendMsg(){
+ const i=document.getElementById('tInput');
+ if(!i.value.trim())return;
+ current.msgs.push({t:i.value.trim(),me:1,tm:'now'});
+ const c=chats.find(x=>x.id===current.id); if(c){c.last=i.value.trim();c.time='now';}
+ i.value='';renderThread();render();
+}
+function closeThread(){document.getElementById('thread').classList.remove('open');document.body.style.overflow='';}
+
+/* nav + tabs */
+document.getElementById('tabs').addEventListener('click',e=>{
+ const t=e.target.closest('.tab');if(!t)return;
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+ ['recv','sent','short'].forEach(p=>document.getElementById('p-'+p).classList.toggle('on',p===t.dataset.p));
+});
+function showInterests(){
+ document.getElementById('pageTitle').textContent='Interests';
+ document.getElementById('tabs').style.display='flex';
+ document.getElementById('p-chat').classList.remove('on');
+ document.querySelector('.tab.on').click();
+ document.getElementById('navInt').classList.add('active');
+ document.getElementById('navChat').classList.remove('active');
+}
+function showChat(){
+ document.getElementById('pageTitle').textContent='Chat';
+ document.getElementById('tabs').style.display='none';
+ ['recv','sent','short'].forEach(p=>document.getElementById('p-'+p).classList.remove('on'));
+ document.getElementById('p-chat').classList.add('on');
+ document.getElementById('navChat').classList.add('active');
+ document.getElementById('navInt').classList.remove('active');
+}
+
+function toast(m){const t=document.getElementById('toast');document.getElementById('toastText').textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2200);}
+render();
+</script>
+</body>
+</html>

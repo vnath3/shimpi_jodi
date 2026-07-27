@@ -45,8 +45,10 @@ pnpm db:seed                      # lookups, plans, prompts, sub-castes
 pnpm dev
 ```
 
-Migrations must run in order:
-`schema.sql` → `schema-v2-addendum.sql` → `schema-v3-addendum.sql`
+Migrations must run in order (numeric prefix enforces this):
+`supabase/migrations/0001_initial_schema.sql` →
+`supabase/migrations/0002_community_tenancy_and_locations.sql` →
+`supabase/migrations/0003_biodata_fields_and_moderation.sql`
 
 ---
 
@@ -55,17 +57,20 @@ Migrations must run in order:
 | File | Read it when |
 |---|---|
 | `CLAUDE.md` | Before writing any code. Non-negotiable rules |
-| `ARCHITECTURE.md` | Understanding how the pieces fit |
-| `SCHEMA.md` | Touching the database |
-| `API.md` | Adding or changing an endpoint |
-| `DESIGN-SYSTEM.md` | Building any UI |
-| `FLOWS.md` | Implementing a user journey |
-| `SECURITY-AND-PRIVACY.md` | Anything touching personal data |
-| `MODERATION.md` | Chat, reports, or safety features |
-| `DEPLOYMENT.md` | Shipping |
-| `TESTING.md` | Writing tests |
-| `ENV.md` | Configuring environments |
-| `ROADMAP.md` | Deciding what to build next |
+| `docs/ARCHITECTURE.md` | Understanding how the pieces fit |
+| `docs/SCHEMA.md` | Touching the database |
+| `docs/API.md` | Adding or changing an endpoint |
+| `docs/DESIGN-SYSTEM.md` | Building any UI |
+| `docs/FLOWS.md` | Implementing a user journey |
+| `docs/SECURITY-AND-PRIVACY.md` | Anything touching personal data |
+| `docs/MODERATION.md` | Chat, reports, or safety features |
+| `docs/DEPLOYMENT.md` | Shipping |
+| `docs/TESTING.md` | Writing tests |
+| `docs/ENV.md` | Configuring environments |
+| `docs/ROADMAP.md` | Deciding what to build next |
+| `docs/DECISIONS.md` | Understanding why past choices were made |
+| `docs/reference/db-design-rationale.md` | Background research behind the schema |
+| `docs/reference/biodata-gap-analysis.md` | Background research on biodata fields and chat safety |
 
 `/design-reference/` holds working HTML prototypes of every screen. Visual truth,
 not code to copy.
